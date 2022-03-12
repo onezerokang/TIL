@@ -2,7 +2,7 @@
 
 ## Typescript
 
-- [타입종류](https://github.com/newding0to100/TIL/Typescript/타입종류.md)
+- [타입종류](https://github.com/newding0to100/TIL/blob/main/Typescript/core-type.md)
 
 ## Javascript
 
