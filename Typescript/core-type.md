@@ -20,6 +20,7 @@
 ## 기본적인 타입선언 방법
 
 ```ts
+// :를 이용해서 타입읠 정의하는 방식을 타입표기(Type Annotation)이라 한다.
 const name: string = "Minsu";
 const age: number = 27;
 const married: boolean = true;
@@ -55,10 +56,10 @@ enum Category {
   FOOD,
   PHONE,
   CAR,
+  // 이렇게 이넘의 인덱스를 변경할 수 있다.
   SHOES = 7,
 }
 const car = Category.FOOD;
-
 const phone = Category[1];
 ```
 
