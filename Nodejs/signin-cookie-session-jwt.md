@@ -13,7 +13,7 @@ npm i express mongoose cookie-parser express-session dotenv
 app.use(cookieParser(비밀키));
 ```
 
-cookie-parser 첫번째 인수에는 비밀키를 넣을 수 있다. 서명된 쿠키가 잇는 경우 제공한 비밀키를 통해 해당 쿠키가 내 서버가 만든 쿠키임을 검등할 수 있다. 서명된 쿠키는 `req.cookies`대신 `req.signedCookies` 객체에 들어있다.
+cookie-parser 첫번째 인수에는 비밀키를 넣을 수 있다. 서명된 쿠키가 잇는 경우 제공한 비밀키를 통해 해당 쿠키가 내 서버가 만든 쿠키임을 검등할 수 있다. 서명된 쿠키는 `req.cookies`대신 `req.signedCookies` 객체에 들어있다. 서명한 쿠키 앞에는 `s:`가 붙으며 실제로는 encodeURIComponent 함수가 실행되어 `s%3A`가 됩니다.
 
 ```js
 res.cookie("id", "yesman", {
