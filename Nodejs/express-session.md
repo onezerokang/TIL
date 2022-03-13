@@ -39,3 +39,5 @@ req.session.distory(); //세션 모두 제거
 
 req.session 객체에 값을 대입하거나 삭제해서 세션 변경가능. 강제로 저장하기 위해 req.session.save() 메서드가 존재하지만
 일반적으로 요청이 끝날 때 자동으로 생성되므로 직접 save 메서드를 호출할 일은 거의 없다.
+
+> 출처: https://www.npmjs.com/package/express-session, Nodejs교과서
