@@ -35,3 +35,5 @@ res.clearCookie("key", "value", { httpOnly: true, secure: true, signed: true });
 ```
 
 쿠키의 key와 value, 옵션이 정확히 일치해야 쿠키가 지워진다. 단 expires나 maxAge 옵션은 일치하지 않아도 된다.
+
+> 출처: Nodejs 교과서, https://www.npmjs.com/package/cookie-parser
