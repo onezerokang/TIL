@@ -107,4 +107,4 @@ let keyName = Enum[a];
 
 출처
 
-> https://www.udemy.com/course/understanding-typescript/ >https://joshua1988.github.io/ts/guide/enums.html#%EC%BB%B4%ED%8C%8C%EC%9D%BC-%EC%8B%9C%EC%A0%90%EC%97%90%EC%84%9C%EC%9D%98-%EC%9D%B4%EB%84%98-%ED%8A%B9%EC%A7%95
+> https://www.udemy.com/course/understanding-typescript/ > https://joshua1988.github.io/ts/guide/enums.html#%EC%BB%B4%ED%8C%8C%EC%9D%BC-%EC%8B%9C%EC%A0%90%EC%97%90%EC%84%9C%EC%9D%98-%EC%9D%B4%EB%84%98-%ED%8A%B9%EC%A7%95

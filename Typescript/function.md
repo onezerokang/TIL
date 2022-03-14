@@ -54,4 +54,4 @@ sum(1, 2, 3, 4, 5);
 ```
 
 > 출처
-> https://www.udemy.com/course/understanding-typescript/ >https://joshua1988.github.io/ts/guide/basic-types.html#string
+> https://www.udemy.com/course/understanding-typescript/ > https://joshua1988.github.io/ts/guide/basic-types.html#string

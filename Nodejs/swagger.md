@@ -440,4 +440,5 @@ app.listen(PORT, () => console.log(`Server listening on port, ${PORT}`));
 전체코드는 이곳에서 확인할 수 있습니다.
 [https://github.com/newding0to100/Swagger-tutorial](https://github.com/newding0to100/Swagger-tutorial)
 
-> 출처: https://www.npmjs.com/package/swagger-autogen > https://www.npmjs.com/package/swagger-ui-express
+> 출처: https://www.npmjs.com/package/swagger-autogen
+> https://www.npmjs.com/package/swagger-ui-express

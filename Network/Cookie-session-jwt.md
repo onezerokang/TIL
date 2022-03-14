@@ -83,4 +83,6 @@ JWT는 Header, Payload, Verify Signature로 이루어져있습니다.
 
 - [쿠키, 세션, JWT를 이용한 로그인 구현 예제](https://github.com/newding0to100/TIL/blob/main/Nodejs/signin-cookie-session-jwt.md)
 
-> 출처: Nodejs교과서, https://developer.mozilla.org/ko/docs/Web/HTTP/Headers/Set-Cookie, https://tecoble.techcourse.co.kr/post/2021-05-22-cookie-session-jwt/
+> 출처: Nodejs교과서
+> https://developer.mozilla.org/ko/docs/Web/HTTP/Headers/Set-Cookie
+> https://tecoble.techcourse.co.kr/post/2021-05-22-cookie-session-jwt/
