@@ -11,7 +11,7 @@
 
 ## Mongodb
 
--[TTL index 설정하기](https://github.com/newding0to100/TIL/blob/main/Mongodb/TTL.md)
+- [TTL index 설정하기](https://github.com/newding0to100/TIL/blob/main/Mongodb/TTL.md)
 
 ## AWS
 
