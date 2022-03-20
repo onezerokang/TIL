@@ -7,16 +7,13 @@
 
 먼저 자바스크립트로 클래스를 정의해보겠다.
 클래스를 만드는 법은 `class`키워드를 사용하고 클래스 이름을 붙여주면 된다. 여기서 클래스 이름은 다른 변수와 구별하기 위해 첫 글자를 대문자로 작성한다.
-`constructor(생성자)`는 객체 내부의 프로퍼티를 정의하는데 사용되는데 이때 `this`는 클래스에 의해 생성된 인스턴스를 참조한다.
+`constructor(생성자)`는 인스턴스가 만들어질 때 실행되는데 주로 클래스의 프로퍼티를 선언하는데 사용한다. 이때 `this`는 클래스에 의해 생성된 인스턴스를 참조한다.
 
 ```js
 class Person {
   constructor(name: string, age: number) {
     this.name = name;
     this.age = age;
-  }
-  sleep() {
-    console.log(`${name} is sleeping`);
   }
 }
 ```
@@ -38,7 +35,7 @@ const sumin = new Person("sumin", 24);
 sumin.sleep();
 ```
 
-클래스로 객체를 만들 때는 `new`키워드를 사용하며 인자로 constructor에 들어갈 값을 넣어준다.
+클래스로 객체를 만들 때는 `new`키워드를 사용하며 인자로 constructor 매개변수에에 들어갈 값을 넣어준다.
 
 ## 생성자 함수와 Class
 
@@ -276,8 +273,6 @@ Math.random();
 
 위 예시는 Math 클래스에서 PI라는 정적 프로퍼티와 random이라는 정적 메서드를 사용하는 모습이다.
 Math 클래스에 직접 접근해야 하기 때문에 Math 인스턴스를 만들 필요가 없습니다. 만드는 방법은 다음과 같다.
-
-**작석중**
 
 ```ts
 class Person {
