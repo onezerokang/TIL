@@ -1,8 +1,8 @@
 # Interface
 
-인터페이스는 **타입체크를 위해 사용된다**.
-인터페이스에 선언된 프로퍼티와 메서드의 구현을 강제하여 일관성을 유지할 수 있도록 한다.
-또 클래스나 함수에 사용할 경우 내부 로직을 읽지 않더라도 '어떤 프로퍼티와 메서드가 있을 것이다'를 알 수 있다.
+인터페이스는 JS에는 없고 TS에만 있는 기능으로 명시적인 코드를 작성하는데 도움을 준다.
+특히 클래스가 특정 메서드나, 프로퍼티를 갖게 하여 객체의 구조를 정의할 수 있는데 이를 통해 일관된 프로그래밍이 가능하다.
+인터페이스가 클래스와 비슷하다고 느낄 수 있는데 인터페이스는 인스턴스를 생성할 수 없고 클래스와 객체의 타입을 정의하는 용도로만 사용된다.
 
 ## 변수와 인터페이스
 
@@ -145,18 +145,24 @@ move(sm3);
 인터페이스의 프로퍼티는 반드시 구현해야 한다. 허나 프로퍼티 뒤에 `?`를 붙일 경우 해당 프로퍼티 구현이 강제되지 않는다.
 
 ```ts
-interface IHouse {
-  rooms: number;
-  address: string;
-  telephone?: string;
-  _type: "APT" | "detached";
+interface Name {
+  name: string;
+  age?: number;
 }
 
-const myHouse: IHouse = {
-  rooms: 1,
-  address: "Seoul",
-  _type: "detached",
-};
+class Person implements Name {
+  constructor(public name: string, public age?: number) {}
+
+  greet(phrase: string) {
+    if (this.age) {
+      console.log(`${phrase} ${this.name} ${this.age}`);
+    } else {
+      console.log(`${phrase} ${this.name}`);
+    }
+  }
+}
+
+const youngmi = new Person("youngmi");
 ```
 
 ## 인터페이스 상속
@@ -214,4 +220,5 @@ const developer: Developer = {
 ```
 
 > 출처
+> https://www.udemy.com/course/understanding-typescript
 > https://poiemaweb.com/typescript-interface
