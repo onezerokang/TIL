@@ -81,3 +81,46 @@ export class CommonModule {}
 허나 전역 모듈을 많이 만들면 응집도가 떨어지기에 꼭 필요한 모듈만 전역으로 만들어야 한다.
 
 ## Dynamic Modules
+
+Consuming Module에서 Host Module을 생성할 때 동적으로 값을 결정하는 모듈.
+ex) 로컬 서버, 테스트 서버, 배포 서버에서 다른 환경변수를 사용하게 한다.
+
+먼저 동적 모듈을 먼저 만들 것이다. 데이터베이스 모듈을 만들고, forRoot이라는 정적 메서드를 만들어준다.
+forRoot의 인자로는 Consuming Module에서 설정할 수 있는 값을 받아준다.
+그리고 해당 설정을 적용한 후 데이터 베이스 모듈을 리턴해주면 App Module에서 다이나믹 모듈을 사용할 수 있다.
+
+**Database Module**
+
+```ts
+import { Module, DynamicModule } from "@nestjs/common";
+import { createDatabaseProviders } from "./database.providers";
+import { Connection } from "./connection.provider";
+
+@Module({
+  providers: [Connection],
+})
+export class DatabaseModule {
+  static forRoot(entities = [], options?): DynamicModule {
+    const providers = createDatabaseProviders(options, entities);
+    return {
+      module: DatabaseModule,
+      providers: providers,
+      exports: providers,
+    };
+  }
+}
+```
+
+**App Module**
+
+```ts
+import { Module } from "@nestjs/common";
+import { DatabaseModule } from "./database/database.module";
+import { User } from "./users/entities/user.entity";
+
+@Module({
+  imports: [DatabaseModule.forRoot([User])],
+  exports: [DatabaseModule],
+})
+export class AppModule {}
+```
