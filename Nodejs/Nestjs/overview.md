@@ -65,13 +65,24 @@ export class SellersService {
 
 ## Middleware
 
+express의 미들웨어처럼 요청 전에 실행되는 코드다.
+pipe이나 guard와 다르게 `ExcutionContext`의 인스턴스에 접근하지 못해 next() 이후 다음 실행될 핸들러를 알 수 없다.
+
 ## Exception Filter
+
+Nestjs는 기본적으로 예외 필터를 가지고 있어 try...catch를 사용하지 않아도 서버가 멈추지 않는다. 예외필터를 개발자가 따로 만들어 등록하고, 적절한 에러 클래스를 일으켜 예외처리를 해줄 수 있다.
 
 ## Pipes
 
+파이프는 인풋 데이터의 타입을 변경하거나, 유효성 검사를 할 때 사용한다.
+
 ## Guards
 
+가드는 주로 인가(Authorization)에 사용된다.
+
 ## Interceptors
+
+인터셉터는 요청이나 응답을 가로채 변형할 때 사용한다.
 
 > 출처
 > https://medium.com/daangn/typescript%EB%A5%BC-%ED%99%9C%EC%9A%A9%ED%95%9C-%EC%84%9C%EB%B9%84%EC%8A%A4%EA%B0%9C%EB%B0%9C-73877a741dbc > https://wikidocs.net/147787
