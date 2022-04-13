@@ -27,15 +27,3 @@ export class AuthGuard implements CanActivate {
 만약 여러개의 가드를 사용하고 싶으면 쉼표(,)로 구분해서 넣어주면 된다.
 
 전역 가드를 만들고 싶으면 `useGlobalGurad`를 사용해주면 되고 Dependency Injection을 하고 싶으면 커스텀 프로바이더로 선언해주면 된다.
-
-## Authorization guard
-
-## Execution context
-
-## Role-based authentication
-
-## Binding guards
-
-## Setting roles per handler
-
-## Putting it all together

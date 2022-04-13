@@ -24,8 +24,7 @@
 
 ## Binding pipes
 
-파이프를 사용하려면 파이프 클래스의 인스턴스를 적절한 컨택스트에 바인딩해야 한다.
-아래 예제는 메서드의 매개변수에 바인딩한다.
+파이프를 사용하려면 파이프 클래스의 인스턴스를 적절한 컨택스트에 바인딩해야 한다. 아래 예제는 메서드의 매개변수에 바인딩한다.
 
 ```ts
 @Get('/:id')
@@ -45,21 +44,3 @@ console.log(typeof id) // number
 }
 
 ```
-
-## Custom pipes
-
-## Schema based validation
-
-## Object schema validation
-
-## Binding validation pipes
-
-## Class validator
-
-## Global scoped pipes
-
-## The built-in ValidationPipe
-
-## Transformation use case
-
-## Providing defaults
