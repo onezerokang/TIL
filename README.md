@@ -8,13 +8,13 @@
 - 문서 내 제목은 되도록 한글로 작성한다.
 - 문장의 간셜성을 위해 평어체를 사용한다.
 
-## Typescript
+## TypeScript
 
-- [타입종류](https://github.com/newding0to100/TIL/blob/main/Typescript/core-type.md)
-- [유니온타입과 앨리어스](https://github.com/newding0to100/TIL/blob/main/Typescript/union-aliases.md)
-- [컴파일 설정](https://github.com/newding0to100/TIL/blob/main/Typescript/compiler.md)
-- [클래스](https://github.com/newding0to100/TIL/blob/main/Typescript/class.md)
-- [인터페이스](https://github.com/newding0to100/TIL/blob/main/Typescript/interface.md)
+- [타입종류](https://github.com/newding0to100/TIL/blob/main/TypeScript/core-type.md)
+- [유니온타입과 앨리어스](https://github.com/newding0to100/TIL/blob/main/TypeScript/union-aliases.md)
+- [컴파일 설정](https://github.com/newding0to100/TIL/blob/main/TypeScript/compiler.md)
+- [클래스](https://github.com/newding0to100/TIL/blob/main/TypeScript/class.md)
+- [인터페이스](https://github.com/newding0to100/TIL/blob/main/TypeScript/interface.md)
 
 ## Javascript
 

@@ -1,4 +1,4 @@
-# Typescript Compiler 설정
+# TypeScript Compiler 설정
 
 타입스크립트의 기본타입을 배울 때는 변경사항이 생길 때마다 `tsc app.js`를 했었다.
 이렇게 일일히 컴파일을 하는 방식은 개발 효율이 떨어지기 때문에 오늘은 타입스크립트 컴파일에 대해 정리했다.
