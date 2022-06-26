@@ -22,7 +22,7 @@
 
 - [TTL index 설정하기](https://github.com/newding0to100/TIL/blob/main/Mongodb/TTL.md)
 - [Populate](https://github.com/newding0to100/TIL/blob/main/Mongodb/populate.md)
-- [Virtual field](https://github.com/newding0to100/TIL/blob/main/Mongodb/virtual-field.md)
+- [Virtuals](https://github.com/newding0to100/TIL/blob/main/Mongodb/virtuals.md)
 
 ## AWS
 
