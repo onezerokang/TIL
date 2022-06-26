@@ -1,5 +1,12 @@
 # TIL
 
+## TIL 작성 규칙
+
+- 매일 매일 작성한다.
+- 폴더의 이름은 대문자로 시작한다.
+- 문서의 이름은 되도록 영어로 작성한다.
+- 문서 내 제목은 되도록 한글로 작성한다.
+
 ## Typescript
 
 - [타입종류](https://github.com/newding0to100/TIL/blob/main/Typescript/core-type.md)
@@ -13,6 +20,8 @@
 ## Mongodb
 
 - [TTL index 설정하기](https://github.com/newding0to100/TIL/blob/main/Mongodb/TTL.md)
+- [Populate](https://github.com/newding0to100/TIL/blob/main/Mongodb/populate.md)
+- [Virtual field](https://github.com/newding0to100/TIL/blob/main/Mongodb/virtual-field.md)
 
 ## AWS
 
