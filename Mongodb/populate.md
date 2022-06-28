@@ -156,7 +156,49 @@ const story = await Story.find().populate({
 
 만약 어떤 문서도 `match`의 조건을 충족하지 못할 경우 해당 필드는 null 혹은 빈 배열이 적용된다.
 
-<!-- limit and perDocumentLimit 내용 추가 -->
+## limit vs perDocumentLimit
+
+Populate은 `limit`옵션을 지원한다.
+하지만
+
+```js
+Story.create([
+  { title: "Casino Royale", fans: [1, 2, 3, 4, 5, 6, 7, 8] },
+  { title: "Live and Let Die", fans: [9, 10] },
+]);
+```
+
+만약 `populate()`에서 limit 옵션을 사용한다면, 두번째 story의 fans는 가져오지 못할 것이다.
+
+```js
+const stories = await Story.find().populate({
+  path: "fans",
+  options: { limit: 2 },
+});
+
+stories[0].name; // 'Casino Royale'
+stories[0].fans.length; // 2
+
+// 2nd story has 0 fans!
+stories[1].name; // 'Live and Let Die'
+stories[1].fans.length; // 0
+```
+
+이는 각 다큐먼트에 대해 별도의 쿼리를 실행하지 않기 위해 몽구스가 대신 `numDocuments \* limit`을 제한으로 사용하여 fans를 쿼리하기 때문이다.
+올바른 limit이 필요한 경우 `perDocumentLimit` 옵션을 사용해야 한다. populate()은 각 story에 별도의 쿼리를 실행해야 하므로 더 느려질 수 있다.
+
+```js
+const stories = await Story.find().populate({
+  path: "fans",
+  perDocumentLimit: 2,
+});
+
+stories[0].name; // 'Casino Royale'
+stories[0].fans.length; // 2
+
+stories[1].name; // 'Live and Let Die'
+stories[1].fans.length; // 2
+```
 
 ## 가져온 문서에서 populate 하기
 
@@ -266,145 +308,7 @@ console.log(comments[0].story.name);
 
 ## Populate Virtuals
 
-지금까지 \_id 필드를 기반으로만 populate을 했다. 하지만 때로는 \_id 값을 저장할 수 없는 경우가 있다.
-일 대 다 관계에서는 \_id를 "다"에 저장해야 한다.
-
-```js
-const AuthorSchema = new Schema({
-  name: String,
-  posts: [{ type: mongoose.Schema.Types.ObjectId, ref: "BlogPost" }],
-});
-
-const BlogPostSchema = new Schema({
-  title: String,
-  comments: [
-    {
-      author: { type: mongoose.Schema.Types.ObjectId, ref: "Author" },
-      content: String,
-    },
-  ],
-});
-
-const Author = mongoose.model("Author", AuthorSchema, "Author");
-const BlogPost = mongoose.model("BlogPost", BlogPostSchema, "BlogPost");
-```
-
-잘못된 스키마 디자인의 예시. 계속 추가될 경우 몽고디비 document 용량 초과.
-최소 카디널리티의 원칙은 블로그 게시물 작성자와 같은 경우 일대다 관계가 "다" 쪽에 저장되어야 한다고 말한다.
-즉 블로그 게시물은 author, 작성자는 자신의 모든 posts
-
-```js
-const AuthorSchema = new Schema({
-  name: String,
-});
-
-const BlogPostSchema = new Schema({
-  title: String,
-  author: { type: mongoose.Schema.Types.ObjectId, ref: "Author" },
-  comments: [
-    {
-      author: { type: mongoose.Schema.Types.ObjectId, ref: "Author" },
-      content: String,
-    },
-  ],
-});
-```
-
-```js
-// Specifying a virtual with a `ref` property is how you enable virtual
-// population
-AuthorSchema.virtual("posts", {
-  ref: "BlogPost",
-  localField: "_id",
-  foreignField: "author",
-});
-
-const Author = mongoose.model("Author", AuthorSchema, "Author");
-const BlogPost = mongoose.model("BlogPost", BlogPostSchema, "BlogPost");
-```
-
-```js
-const author = await Author.findOne().populate("posts");
-
-author.posts[0].title; // Title of the first blog post
-```
-
-```js
-const authorSchema = new Schema(
-  { name: String },
-  {
-    toJSON: { virtuals: true }, // So `res.json()` and other `JSON.stringify()` functions include virtuals
-    toObject: { virtuals: true }, // So `console.log()` and other functions that use `toObject()` include virtuals
-  }
-);
-```
-
-```js
-let authors = await Author.find({})
-  // Won't work because the foreign field `author` is not selected
-  .populate({ path: "posts", select: "title" })
-  .exec();
-
-authors = await Author.find({})
-  // Works, foreign field `author` is selected
-  .populate({ path: "posts", select: "title author" })
-  .exec();
-```
-
-## Populate Virtuals: 카운트 옵션
-
-```js
-const PersonSchema = new Schema({
-  name: String,
-  band: String,
-});
-
-const BandSchema = new Schema({
-  name: String,
-});
-BandSchema.virtual("numMembers", {
-  ref: "Person", // The model to use
-  localField: "name", // Find people where `localField`
-  foreignField: "band", // is equal to `foreignField`
-  count: true, // And only get the number of docs
-});
-
-// Later
-const doc = await Band.findOne({ name: "Motley Crue" }).populate("numMembers");
-doc.numMembers; // 2
-```
-
-## Populate Virtuals: 일치 옵션
-
-```js
-// Same example as 'Populate Virtuals' section
-AuthorSchema.virtual("posts", {
-  ref: "BlogPost",
-  localField: "_id",
-  foreignField: "author",
-  match: { archived: false }, // match option with basic query selector
-});
-
-const Author = mongoose.model("Author", AuthorSchema, "Author");
-const BlogPost = mongoose.model("BlogPost", BlogPostSchema, "BlogPost");
-
-// After population
-const author = await Author.findOne().populate("posts");
-
-author.posts; // Array of not `archived` posts
-```
-
-```js
-AuthorSchema.virtual("posts", {
-  ref: "BlogPost",
-  localField: "_id",
-  foreignField: "author",
-  // Add an additional filter `{ tags: author.favoriteTags }` to the populate query
-  // Mongoose calls the `match` function with the document being populated as the
-  // first argument.
-  match: (author) => ({ tags: author.favoriteTags }),
-});
-```
+자세한 내용은 [Virtuals](https://github.com/newding0to100/TIL/blob/main/Mongodb/virtuals.md)를 참조하십시오.
 
 ## 미들웨어에서 Populate하기
 
