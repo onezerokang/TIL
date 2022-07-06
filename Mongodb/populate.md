@@ -154,7 +154,7 @@ const story = await Story.find().populate({
 });
 ```
 
-만약 어떤 문서도 `match`의 조건을 충족하지 못할 경우 해당 필드는 null 혹은 빈 배열이 적용된다.
+`match`의 조건을 충족하지 못한 데이터는 null 혹은 빈배열을 반환한다.
 
 ## limit vs perDocumentLimit
 
