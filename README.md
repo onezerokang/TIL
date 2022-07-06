@@ -20,9 +20,11 @@
 
 ## Mongodb
 
+- [몽고DB 완벽 가이드](https://github.com/newding0to100/TIL/blob/main/Mongodb/몽고DB완벽가이드.md)
 - [TTL index 설정하기](https://github.com/newding0to100/TIL/blob/main/Mongodb/TTL.md)
 - [Populate](https://github.com/newding0to100/TIL/blob/main/Mongodb/populate.md)
 - [Virtuals](https://github.com/newding0to100/TIL/blob/main/Mongodb/virtuals.md)
+- [스키마 디자인하기](https://github.com/newding0to100/TIL/blob/main/Mongodb/design-schema.md)
 
 ## AWS
 
