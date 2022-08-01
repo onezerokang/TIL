@@ -1,7 +1,6 @@
 # Jest
 
-Node.js 테스트에 사용할 패키지는 페이스북에서 개발한 jest이다.
-jest는 테스팅에 필요한 툴들을 대부분 갖고 있어 편리하게 사용할 수 있다.
+jest는 페이스북에서 개발한 테스팅 프레임워크로 테스팅에 필요한 툴들을 대부분 갖고 있어 편리하게 사용할 수 있다.
 
 ```
 npm i jest -D
@@ -22,7 +21,7 @@ jest를 설치한 후에는 package.json에 test 스크립트를 작성하여 je
 }
 ```
 
-이제 테스트에 사용할 파일을 만들어야 하는데, 테스트 파일은 파일명과 확장자 사이에 test나 spec을 넣으면 jest가 테스트 파일로 인식한다.
+이제 테스트 코드를 작성할 파일을 만들어야 하는데, 테스트 파일은 파일명과 확장자 사이에 test나 spec을 넣으면 jest가 테스트 파일로 인식한다.
 
 > 예시: users.test.js, users.spec.js
 
@@ -52,7 +51,7 @@ describe("계산", () => {
 
 ## Matchers
 
-자주 사용되는 matcher는 다음과 같다.
+Jest는 matcher를 사용하여 다양한 방식으로 값을 테스트할 수 있다. 자주 사용되는 matcher는 다음과 같다.
 
 ### toEqual(value)
 
@@ -80,11 +79,11 @@ expect(2 + 2).toBe(4);
 
 ```js
 test("", () => {
-  expect(updateProduct()).toBeDefined();
+  expect(undefined).toBeDefined();
 });
 ```
 
-### toBeTruty() toBeFalsy()
+### toBeTruthy() toBeFalsy()
 
 검증하려는 값이 참 같은 값인지, 거짓같은 값인지 테스트한다.
 
@@ -95,13 +94,32 @@ expect(123).toBeTruthy();
 
 ### toHaveBeenCalled()
 
-함수의 호출여부를 테스트한다. `toBeCalled()`로 대체해서 사용해도 된다.
+alias: `toBeCalled()`  
+특정 인자와 함께 모킹 함수가 호출되었는지 테스트한다.
 
 ```js
+function drinkAll(callback, flavour) {
+  if (flavour !== "octopus") {
+    callback(flavour);
+  }
+}
 
+describe("drinkAll", () => {
+  test("drinks something lemon-flavoured", () => {
+    const drink = jest.fn();
+    drinkAll(drink, "lemon");
+    expect(drink).toHaveBeenCalled();
+  });
+
+  test("does not drink something octopus-flavoured", () => {
+    const drink = jest.fn();
+    drinkAll(drink, "octopus");
+    expect(drink).not.toHaveBeenCalled();
+  });
+});
 ```
 
-### toHaveLength()
+### toHaveLength(number)
 
 배열이나 문자열의 `.length`를 체크한다.
 
@@ -151,23 +169,74 @@ test("compiling android goes as expected", () => {
 
 객체에 해당 key: value 값이 있는지 검사한다.
 
+```js
+test("find product property", () => {
+  const product = {
+    id: 1,
+    name: "iphone",
+  };
+  expect(product).toHaveProperty(id, 1);
+});
+```
+
 ### toBeCalledTimes() / toBeCalledWith()
 
 `toBeCalledTimes()`: 함수가 몇번 호출되었는지 검증
 
 `toBeCalledWith()`: 함수가 설정한 인자로 호출되었는지 검증
 
+```js
+const printHi = (name) => console.log("Hi" + name);
+
+printHi("Suzi");
+
+expect(printHi).toBeCalledTimes(1);
+expect(printHi).toBeCalledWith("Suzi");
+```
+
 ### toReturn(), toHaveReturnedTimes()
 
 함수가 오류없이 반환되는지 테스트
+
+```js
+test("drinks returns", () => {
+  const drink = jest.fn(() => true);
+
+  drink();
+
+  expect(drink).toHaveReturned();
+});
+```
 
 ### toReturnTimes(), toHaveReturnedTimes()
 
 함수가 지정한 횟수만큼 오류없이 반환되는지 테스트하는데 호출 횟수는 포함하지 않는다.
 
+```js
+test("drink returns twice", () => {
+  const drink = jest.fn(() => true);
+
+  drink();
+  drink();
+
+  expect(drink).toHaveReturnedTimes(2);
+});
+```
+
 ### toReturnWith(), toHaveReturnedWith(value)
 
 함수가 지정한 값을 반환하는지 테스트
+
+```js
+test("drink returns La Croix", () => {
+  const beverage = { name: "La Croix" };
+  const drink = jest.fn((beverage) => beverage.name);
+
+  drink(beverage);
+
+  expect(drink).toHaveReturnedWith("La Croix");
+});
+```
 
 ## Mocking
 
