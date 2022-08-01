@@ -331,6 +331,8 @@ jest에는 coverage라는 기능이 있는데, 이를 사용하면 전체 코드
 npm run coverage
 ```
 
+![image](https://user-images.githubusercontent.com/60874549/182054682-75aad4ae-4a8c-4d3d-b529-1e62574a4dce.png)
+
 - File
   - 파일과 폴더 이름
 - & Stmts
