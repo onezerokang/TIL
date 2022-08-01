@@ -28,34 +28,6 @@ _단위 테스트 하는 방법과 예시 작성하기_
 
 _좋은 단위테스트에 대해 작성하기_
 
-## 테스트 커버리지(Test coverage)
-
-jest에는 coverage라는 기능이 있는데, 이를 사용하면 전체 코드 중 테스트되는 코드와 테스트되지 않은 코드의 비율을 확인할 수 있다. 커버리지 기능을 사용하기 위해서는 package.json에 아래와 같이 coverage 스크립트를 추가해준다.
-
-```json
-{
-  "name": "",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "start": "nodemon index.js",
-    "test": "jest",
-    "coverage": "jest --coverage"
-  }
-}
-```
-
-이제 테스트 커버리지를 확인할 수 있다.
-
-```
-npm run coverage
-```
-
-_커버리지 사진 추가하기_
-
-_커버리지 보는 법, 각 항목에 대한 설명 추가하기_
-
 ## 통합 테스트(Integration Test)
 
 _통합 테스트에 대한 설명_

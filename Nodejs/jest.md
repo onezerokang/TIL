@@ -307,9 +307,45 @@ test("mock Test", () => {
 });
 ```
 
-_jest.fn()_ 만 공부하자
+## 테스트 커버리지(Test coverage)
 
-### 예제
+jest에는 coverage라는 기능이 있는데, 이를 사용하면 전체 코드 중 테스트되는 코드와 테스트되지 않은 코드의 비율을 확인할 수 있다. 커버리지 기능을 사용하기 위해서는 package.json에 아래와 같이 coverage 스크립트를 추가해준다.
+
+```json
+{
+  "name": "",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon index.js",
+    "test": "jest",
+    "coverage": "jest --coverage"
+  }
+}
+```
+
+이제 테스트 커버리지를 확인할 수 있다.
+
+```
+npm run coverage
+```
+
+- File
+  - 파일과 폴더 이름
+- & Stmts
+  - 구문 비율
+- % Branch
+  - if문 등의 분기점 비율
+- % Funcs
+  - 함수 비율
+- % Lines
+  - 코드 줄 수 비율
+- % Uncovered Line
+  - 커버되지 않은 줄 위치
+
+퍼센테지가 높을 수록 많은 코드가 테스트되었다는 뜻이다.  
+여기선 명시적으로 테스트하고 require한 코드만 커버리지 분석이 된다는 점을 주의해야 한다.
 
 ## 참조
 
