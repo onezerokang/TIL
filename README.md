@@ -25,6 +25,7 @@
 - [Populate](https://github.com/newding0to100/TIL/blob/main/Mongodb/populate.md)
 - [Virtuals](https://github.com/newding0to100/TIL/blob/main/Mongodb/virtuals.md)
 - [스키마 디자인하기](https://github.com/newding0to100/TIL/blob/main/Mongodb/design-schema.md)
+- [Transaction](https://github.com/newding0to100/TIL/blob/main/Mongodb/transaction.md)
 
 ## AWS
 
@@ -33,6 +34,7 @@
 - [cookie-parser 사용법](https://github.com/newding0to100/TIL/blob/main/Nodejs/cookie-parser.md)
 - [express-session 사용법](https://github.com/newding0to100/TIL/blob/main/Nodejs/express-session.md)
 - [Swagger로 개발문서 작성하기](https://github.com/newding0to100/TIL/blob/main/Nodejs/swagger.md)
+- [jest](https://github.com/newding0to100/TIL/blob/main/Nodejs/jest.md)
 
 - [Nest.js](https://github.com/newding0to100/TIL/blob/main/Nodejs/Nestjs)
 
