@@ -349,10 +349,28 @@ npm run coverage
 퍼센테지가 높을 수록 많은 코드가 테스트되었다는 뜻이다.  
 여기선 명시적으로 테스트하고 require한 코드만 커버리지 분석이 된다는 점을 주의해야 한다.
 
+## before /after
+
+테스트를 작성하다보면 모든 테스트 함수에서 공통적인 로직이 필요할 때가 있다.
+
+기본적으로 테스트 mock 함수는 상태가 유지되는 속성이 있기 때문에,
+테스트에 쓰인 데이터가 그대로 남아있다. 따라서 다음 테스트를 진행할때 이전에 쓰였던 mock 함수를 또 쓴다고 하면, 기존의 데이터때문에 결과가 이상해 질 수 있다.
+
+before / after 이라는 말은, 테스트 하기 전 / 한 후에 데이터 설정 혹은 정리를 위해 쓰인다는 개념에서 비롯된 것이다.
+
+### beforeAll() / afterAll()
+
+`beforeAll()`과 `afterAll()`은 맨 처음과 맨 끝에 딱 한번씩만 호출 되게 설정한다.
+
+### beforeEach() / afterEach()
+
+`beforeEach()`와 `afterEach()`는 테스트 함수들이 각각 실행될 때마다 매번 불러와주는 개념이다.
+
 ## 참조
 
 > [Jest 공식문서](https://jestjs.io/)  
 > [Node.js 교과서 11장 - 노드 서비스 테스트하기](http://www.yes24.com/Product/Goods/91213376)  
 > [[JEST] 📚 Matcher 함수 종류 정리](https://inpa.tistory.com/entry/JEST-%F0%9F%93%9A-jest-%EA%B8%B0%EB%B3%B8-%EB%AC%B8%EB%B2%95-%EC%A0%95%EB%A6%AC?category=914656)  
 > [[JEST] 📚 모킹 Mocking 정리 (jest.fn / jest.mock /jest.spyOn)
-> ](https://inpa.tistory.com/entry/JEST-%F0%9F%93%9A-%EB%AA%A8%ED%82%B9-mocking-jestfn-jestspyOn?category=914656)
+> ](https://inpa.tistory.com/entry/JEST-%F0%9F%93%9A-%EB%AA%A8%ED%82%B9-mocking-jestfn-jestspyOn?category=914656)  
+> [[JEST] 📚 테스트 before / after 처리하기](https://inpa.tistory.com/entry/JEST-%F0%9F%93%9A-%ED%85%8C%EC%8A%A4%ED%8A%B8-before-after-%EC%B2%98%EB%A6%AC%ED%95%98%EA%B8%B0?category=914656)
