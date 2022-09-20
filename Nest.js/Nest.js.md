@@ -6,9 +6,9 @@ _개요 들어갈 곳_
 
 자세한 내용은 [Nest.js/Controller](./Controller.md) 문서를 참고하십시오.
 
-## Service
+## Provider
 
-자세한 내용은 [Nest.js/Service](./Service.md) 문서를 참고하십시오.
+자세한 내용은 [Nest.js/Provider](./Provider.md) 문서를 참고하십시오.
 
 ## Module
 
