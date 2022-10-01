@@ -98,6 +98,49 @@ export class UsersController {
 }
 ```
 
+## 커스텀 파이프
+
+파이프는 `PipeTransform` 인터페이스를 구현한다. 이를 사용하여 커스텀 파이프를 만들 수 있다.
+아래 예시는 전달된 값이 mongoDB의 `_id`가 맞는지 확인하는 커스텀 파이프다.
+
+- **mongo-id.pipe.ts**
+
+```ts
+import {
+  ArgumentMetadata,
+  BadRequestException,
+  Injectable,
+  PipeTransform,
+} from "@nestjs/common";
+import { Types } from "mongoose";
+
+@Injectable()
+export class MongoIdPipe implements PipeTransform {
+  transform(value: any, metadata: ArgumentMetadata) {
+    if (!Types.ObjectId.isValid(value)) {
+      throw new BadRequestException("유효하지 않은 아이디입니다");
+    }
+    return value;
+  }
+}
+```
+
+- **users.controller.ts**
+
+```ts
+// ...import 생략
+
+@Controller("users")
+export class UsersController {
+  constructor(private readonly usersService: UsersService) {}
+
+  @Get(":id")
+  async findUserById(@Param("id", MongoIdPipe) id: string) {
+    return this.usersService.findUserById(id);
+  }
+}
+```
+
 ## 참조
 
 - [파이프(Pipe)](https://wikidocs.net/158588)
