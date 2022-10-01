@@ -25,3 +25,7 @@ _개요 들어갈 곳_
 ## Guard
 
 자세한 내용은 [Nest.js/Guard](./Guard.md) 문서를 참고하십시오.
+
+## 기타 문서
+
+- [req 객체에 user를 저장하는 방법](./req%20%EA%B0%9D%EC%B2%B4%EC%97%90%20user%EB%A5%BC%20%EC%A0%80%EC%9E%A5%ED%95%98%EB%8A%94%20%EB%B0%A9%EB%B2%95.md)
