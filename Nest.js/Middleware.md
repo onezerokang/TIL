@@ -50,7 +50,21 @@ export const Logger = (req: Request, res: Response, next: NextFunction) => {
 };
 ```
 
-다만 함수 미들웨어는 `constructor`를 통한 DI를 할 수 없다.
+다만 함수 미들웨어는 의존성 주입이 불가능하다.
+만약 전역 미들웨어에 의존성 주입을 사용해야 한다면 루트 모듈에서 `.forRoutes('*')`로 등록해줘야 한다.
+
+```ts
+@Module({
+  // ... 생략
+})
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer
+      .apply(AuthMiddleware)
+      .forRoutes({ path: "*", method: RequestMethod.ALL });
+  }
+}
+```
 
 ## 참조
 
