@@ -870,3 +870,210 @@ System.out.println(user) // "name= 이상혁 age= 26"
 만약 `equals()` 메서드를 오버라이딩 했다면 `hashCode()` 메서드도 오버라이딩 해주어야 한다.
 
 다행인 점은 많은 IDE에서 `equals()` 메서드를 자동으로 생성해주는 기능을 제공한다.
+
+## 인터페이스와 추상클래스, enum
+
+일반적인 개발절차는 분석, 설계, 개발 및 테스트, 시스템 릴리즈 순서로 진행된다.
+인터페이스와 추상클래스는 설계단계에서 클래스가 어떤 메서드와 변수를 갖을지 미리 정의해둘 수 있다.
+
+### 인터페이스
+
+인터페이스의 특징은 다음과 같다.
+
+- 인터페이스를 만들 때는 `interface` 예약어를 사용한다.
+- 인터페이스는 클래스와 같이 .java 확장자를 사용하고 컴파일 방식도 같기 때문에 인터페이스 앞에 I를 붙여 구분하는 방식을 사용한다(필수는 아님)
+- 클래스 뒤에 `implements` 예약어와 인터페이스가 있으면 해당 클래스는 인터페이스를 구현해야 한다.
+- 클래스는 인터페이스에 정의된 메서드를 반드시 구현해야 한다(구현하지 않으면 컴파일 에러가 발생한다).
+- 클래스는 여러개의 인터페이스를 구현할 수 있다.
+
+다음은 인터페이스의 예시코드이다.
+
+```java
+public interface IMemberManager {
+  public boolean addMember(MemberDTO member);
+  public boolean deleteMember(number id);
+}
+```
+
+```java
+public class MemberManager implements IMemberManager {
+  public boolean addMemeber(MemberDTO member) {
+    return false;
+  }
+  public boolean deleteMember(number id) {
+    return false;
+  }
+}
+```
+
+다음은 인터페이스를 만들고 사용할 때 갖는 장점이다
+
+- 개발자 역량에 따른 클래스, 메서드, 변수 네이밍 수준의 격차를 줄일 수 있다.
+- 미리 네이밍을 해두면 실제 개발 단계에서 변수명이나 매개변수 구조등을 고민할 필요가 없다.
+- 선언과 구현을 구분할 수 있다.
+
+### 추상클래스
+
+추상클래스의 특징은 다음과 같다
+
+- 추상클래스는 `class` 앞에 `abstract` 예약어를 붙여 선언할 수 있다.
+- 추상 클래스 안에는 `abstract`로 선언된 메서드가 0개 이상 있어야 한다.
+- 클래스에 `abstract` 메서드가 하나라도 있다면 해당 클래스는 반드시 `abstract`으로 선언되어야 한다.
+- `abstract` 클래스는 몸통이 있는 메서드가 0개 이상 있어도 괜찮다.
+- `abstract` 클래스는 extends로 상속받을 수 있다.
+
+다음은 추상클래스의 예시코드이다.
+
+```java
+public abstract class MemberManagerAbstract {
+    public boolean addMember(MemberDTO member);
+  public boolean deleteMember(number id);
+  public void printLog(String data) {
+    System.out.println("Data= " + data);
+  }
+}
+```
+
+```java
+
+
+```
+
+### 인터페이스와 추상클래스의 차이
+
+### final
+
+`final` 예약어는 클래스, 메서드, 변수에 사용할 수 있다.
+
+- final 클래스
+  - 다른 클래스가 final 클래스를 상속하지 못하게 한다.
+- final 메서드
+  - 다른 클래스가 final 메서드를 오버라이딩하지 못하게 한다.
+- final 클래스 변수 & 인스턴스 변수
+  - 변수를 값을 바꿀 수 없는 상수로 만든다. 선언을 하고 값을 지정하지 않으면 컴파일 에러가 발생한다.
+- final 로컬변수 & 매개변수
+  - 변수를 값을 바꿀 수 없는 상수로 만든다. 선언을 하고 값을 지정하지 않아도 컴파일 에러가 발생하지는 않는다.
+- final 참조 자료형
+  - 참조 자료형을 final로 선언하더라도 참조 자료형 안에 있는 변수까지 final 변수가 되진 않는다.
+
+```java
+public final finalClass {
+  public final printLog(String data) {
+    System.out.println("Data= " + data);
+  }
+}
+```
+
+### enum
+
+enum은 상수의 집합을 모아놓은 클래스이다.
+다음은 enum을 선언하고 사용하는 예시이다.
+
+```java
+public enum Role {
+  NORMAL,
+  ADMIN;
+}
+```
+
+```java
+public class Auth {
+  public static void main(String args[]) {
+    Auth auth = new Auth();
+    auth.checkAdmin(Role.Admin);
+  }
+
+  public boolean checkAdmin(Role role) {
+    switch(role) {
+      case NORMAL:
+        return false;
+      case ADMIN:
+        return true;
+    }
+  }
+}
+```
+
+## 다 배운 것 같지만, 예외라는 중요한 것이 있어요
+
+### try...catch 블록
+
+자바에서는 `try..catch 블록`을 이용해서 예외를 처리할 수 있다.
+`try...catch 블록`으로 감싸지 않은 곳에서 예외가 발생하면 해당 스레드가 종료된다.
+
+```java
+try{
+// 예외가 발생할 수 있는 코드
+}catch(NullPointerException e) {
+  // NullPointer 예외가 발생했을 때 실행할 코드
+}catch(ArrayIndexOutOfBoundsException e) {
+  // ArrayIndexOutOfBounds 예외가 발생했을 떄 실행할 코드
+}catch(Exception e) {
+  // 위에 명시한 예외가 아닌 예외가 발생했을 때 실행할 코드
+}finally {
+  // 예외 발생 여부와 상관없이 실행할 코드
+}
+```
+
+`try...catch 블록`의 특징은 다음과 같다.
+
+- catch 블록은 여러개를 사용할 수 있다.
+- 먼저 선언한 catch 블록의 예외 클래스가 다음에 선언한 catch 블록의 부모에 속하면, 자식에 속하는 catch 블록은 절대 실행될 일이 없으므로 컴파일이 되지 않는다.
+- 하나의 try 블록에서 예외가 발생하면 그 예외와 관련있는 catch 블록이 실행된다.
+- catch 블록 중 발생한 예외와 관련있는 블록이 없으면, 예외가 발생되면서 해당 쓰레드는 종료된다. 이를 방지하기 위해 마지막 catch ㅂ르록에는 Exception 클래스로 묶어주는 버릇을 갖는게 좋다.
+
+### 예외의 종류
+
+- checked exception
+  - 컴파일 시 찾을 수 있는 예외다.
+- error
+  - 자바 프로그램 밖에서 발생한 예외를 말한다(서버의 디스크가 고장나거나 메인보드가 맛이 간 경우 등)
+- runtime exception
+  - 컴파일로 잡지 못한 예외이다. 런타임 예외에 해당하는 모든 예외는 `RuntimeException`를 확장한 예외이다.
+
+### Throwable
+
+`Exception` 클래스와 `Error` 클래스는 `Throwable` 클래스를 공통으로 상속한다. `Throwable` 클래스는 다음과 같은 생성자를 갖는다.
+
+- `Throwable()`
+- `Throwable(String message)`
+- `Throwable(String message Throwable cause)`
+- `Throwable(Throwable cause)`
+
+`Throwable` 클래스에 선언되어있고 `Exception` 클래스에서 오버라이딩한 메서드는 10개가 넘는다. 그 중 많이 사용되는 메서드는 다음과 같다.
+
+- `getMessage()`
+  - 예외 메시지를 String 형태로 제공받는다.
+- `toString()`
+  - 예외 메시지와 예외 클래스 이름을 String 형태로 제공받는다.
+- `printStackTrace()`
+  - 예외 메시지와 스택 트레이스를 출력해준다. printStackTrace는 메시지 량이 많기 때문에 로그가 엄청나게 쌓일 수 있다. 그러므로 꼭 필요한 곳에서만 사용하는 것을 권장한다.
+
+### throw, throws
+
+개발자는 `throw` 이후에 예외 클래스의 객체를 생성하여 예외를 발생시킬 수 있다.
+
+```java
+throw new Exception("유효한 이메일이 아닙니다");
+```
+
+메서드를 선언할 때 매개 변수 소괄호 뒤에 `throws` 예약어를 적어준 후 예외를 선언하면, 해당 메서드에서 선언한 예외가 발생했을 때 호출한 메서드로 예외처리를 위임할 수 있다. 즉 해당 메서드에서 예외를 `try...catch`로 감싸지 않아도 스레드가 종료되지 않는다.
+
+```java
+public void throws() throws NullPointerException, Exception {}
+```
+
+### 커스텀 예외
+
+`Throwable`, `Exception` 등을 상속하여 커스텀 예외를 만들 수 있다.
+
+```java
+public class MyException extends Exception {
+  public MyException() {
+    super();
+  }
+  public MyException(String message) {
+    super(message);
+  }
+}
+```
