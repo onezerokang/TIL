@@ -1077,3 +1077,91 @@ public class MyException extends Exception {
   }
 }
 ```
+
+## String
+
+String은 자바에서 가장 많이 사용하는 클래스로 선언부는 다음과 같다.
+
+```
+public static String extends Object
+  implements Serializable, CharSequence, Comparable<String>
+```
+
+다음은 자주 사용하는 String 메서드다.
+
+- length()
+- isEmpty()
+- getBytes()
+- equals()
+- startsWith(), endsWith()
+- contains()
+- indexOf(), lastIndexOf()
+- substring(), subsequence()
+- split()
+- concat()
+- trim()
+- replace()
+- format()
+- intern()
+
+String은 불변(immutable)하다. StringBuffer와 StringBuilder를 사용하면 이 문제를 해결할 수 있다.
+append() 메서드로 문자열을 추가한다. StringBuffer가 thread safe 하고 StringBuilder는 thread safe 하진 않지만 더 빠르다.
+JDK5이상부턴 String 데이터에 + 연산자를 사용하면 자동으로 치환하지만 for loop 같은 반복 연산은 수동으로 해야 한다.
+
+## 클래스 안에 클래스가 들어갈 수도 있구나
+
+- Static nested class
+- nested inner class
+- nested annonymous class
+
+## 어노테이션이라는 것도 알아야 한다
+
+자바에 내장되어있는 어노테이션은 다음과 같다.
+
+- `@Override()`
+  - 선언한 메서드가 오버라이드 되었다는 것을 나타낸다.
+  - 부모 클래스에서 해당 메서드가 존재하지 않으면 컴파일 에러가 발생한다.
+- `@Deprecated()`
+  - 해당 메서드가 더 이상 사용되지 않음을 나타낸다.
+  - 만약 사용할 경우 컴파일 경고가 발생한다.
+- `@SuppressWarnings()`
+  - 선언한 곳의 경고가 발생하지 않도록 막는다.
+
+다음은 어노테이션 사용 예시이다.
+
+```java
+public class Parent {
+  public void printLog(String data) {
+    System.out.println(data);
+  }
+}
+```
+
+```java
+public class Child extends Parent {
+  @Override()
+  public void printLog(String data) {
+    System.out.println("info: " + data);
+  }
+
+  @Deprecated()
+  public void deprecatedMethod() {
+    System.out.println("This method is deprecated")
+  }
+}
+```
+
+```java
+public class Main {
+  public static void main(String args[]) {
+    Main main = new Main();
+    main.useDeprecatedMethod();
+  }
+
+  @SuppressWarnings()
+  public useDeprecatedMethod() {
+    Child child = new Child();
+    child.deprecatedMethod()
+  }
+}
+```
