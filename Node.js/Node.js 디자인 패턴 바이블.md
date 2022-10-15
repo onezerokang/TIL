@@ -72,3 +72,126 @@ Node.js는 JavaScript가 운영체제에서 제공하는 기본적인 기능을 
 - HTTP 서버 생성
 - 해시 알고리즘 사용
 - 애플리케이션이 돌고 있는 프로세스 정보 접근
+
+## 모듈 시스템
+
+모듈은 어플리케이션을 구조화하고 정보에 대한 은닉성을 강화시켜주는 주된 장치이다.
+이를 통해 코드의 가독성과 재사용성을 높일 수 있다.
+
+과거 웹이 지금과 같이 복잡하지 않았을 때는 모듈 시스템이 존재하지 않았다.
+하지만 JS 브라우저 애플리케이션이 점점 복잡해지고 여러 프레임워크가 생태계를 점유해가면서
+
+Node.js는 CommonJS라는 모듈 시스템을 고안했다.
+
+2015년 ECMAScript의 발표와 힘꼐 표준 모듈 시스템이 고안된다.
+
+### CommonJS 모듈
+
+CommonJS는 Node.js의 첫 번째 내장 모듈 시스템으로 CommonJS 명세를 고려하여 추가적인 자체 확장 기능과 께 구현되었다.
+
+- `require`는 로컬 파일 시스템으로부터 모듈을 임포트한다.
+- `exports`와 `module.exports`는 특별한 변수로서 현재 모듈에서 공개될 기능을 내보내기 위해서 사용된다.
+
+#### 직접 만드는 모듈 로더
+
+```js
+function moduleLoader(filename, module, require) {
+  const wrappedSrc = `(function (module, exports, require) {
+    ${fs.readFileSync(filename, "utf8")}
+  })(module, module.exports, require)`;
+  eval(wrappedSrc);
+}
+```
+
+```js
+function require(moduleName) {
+  console.log(`Required invoked for module: ${moduleName}`);
+  const id = require.resolve(moduleName);
+  if (require.cached[id]) {
+    return require.cached[id].exports;
+  }
+
+  // 모듈 메타데이터
+  const module = {
+    exports: {},
+    id,
+  };
+
+  // 캐시 업데이트
+  required.cache[id] = module;
+
+  // 모듈 로드
+  loadModule(id, module, require);
+
+  // 익스포트되는 변수반환
+  return module.exports;
+}
+```
+
+#### 모듈 정의
+
+```js
+// 또 다른 종속성 로드
+const dependency = require("./anotherModule");
+
+// private 함수
+function log() {
+  console.log(`Well done ${dependency.username}`);
+}
+
+// 공개적으로 사용되기 위해 익스포트되는 API
+
+module.exports.run = () => {
+  log();
+};
+```
+
+### 모듈 정의 패턴
+
+- 함수 내보내기
+
+```js
+module.exports = (message) => {
+  console.log(`info: ${message}`);
+};
+module.exports.verbose = (message) => {
+  console.log(`verbose: ${message}`);
+};
+```
+
+- 클래스 내보내기
+
+```js
+class Logger {
+  constructor(name) {
+    this.name = name;
+  }
+
+  info(message) {
+    console.log(`info: ${message}`);
+  }
+
+  verbose(message) {
+    console.log(`verbose: ${message}`);
+  }
+}
+
+module.exports = Logger;
+```
+
+- 인스턴스 내보내기
+
+```js
+class Logger {
+  constructor(name) {
+    this.count = 0;
+    this.name = name;
+  }
+  log(message) {
+    this.count++;
+    console.log(`[${this.name}] ${message}`);
+  }
+}
+
+module.exports = new Logger("DEFAULT");
+```
