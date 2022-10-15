@@ -1089,30 +1089,52 @@ public static String extends Object
 
 다음은 자주 사용하는 String 메서드다.
 
-- length()
-- isEmpty()
-- getBytes()
-- equals()
-- startsWith(), endsWith()
-- contains()
-- indexOf(), lastIndexOf()
-- substring(), subsequence()
-- split()
-- concat()
-- trim()
-- replace()
-- format()
-- intern()
-
-String은 불변(immutable)하다. StringBuffer와 StringBuilder를 사용하면 이 문제를 해결할 수 있다.
-append() 메서드로 문자열을 추가한다. StringBuffer가 thread safe 하고 StringBuilder는 thread safe 하진 않지만 더 빠르다.
-JDK5이상부턴 String 데이터에 + 연산자를 사용하면 자동으로 치환하지만 for loop 같은 반복 연산은 수동으로 해야 한다.
+- `length()`
+  - 문자열의 길이를 반환한다.
+- `isEmpty()`
+  - 문자열의 길이가 0인지 체크한다.
+- `getBytes()`
+  - 문자열을 byte 배열로 변환한다.
+- `equals()`
+  - 문자열이 같은지 비교한다.
+- `startsWith()`, `endsWith()`
+  - 문자열이 매개 변수로 넘어온 문자열로 시작하는지, 끝나는지를 확인한다.
+- `contains()`
+  - 매개 변수로 넘어온 문자열이 포함되어 있는지 확인한다.
+- `indexOf()`, `lastIndexOf()`
+  - 매개변수로 넘어온 문자열이 있는 위치를 0부터 시작하는 값으로 리턴한다.
+- `substring()`, `subsequence()`
+  - 문자열의 특정 범위 값을 잘라서 리턴한다.
+- `split()`
+  - 문자열을 매개 변수로 넘어온 정규 표현식에 따라서 분할한 후 이를 String 배열로 리턴한다.
+- `concat()`
+  - 기존 문자열 뒤에 매개 변수로 넘어온 문자열을 합친다.
+- `trim()`
+  - 문자열 앞 뒤 공백을 제거한다.
+- `replace()`
+  - 문자열의 특정 값을 변경한다.
+- `format()`
+  - 문자열을 정해진 포맷으로 변환한다.
 
 ## 클래스 안에 클래스가 들어갈 수도 있구나
 
+클래스 안에 선언된 클래스를 Nested 클래스라고 한다.
+아래는 nested class의 종류다.
+
 - Static nested class
-- nested inner class
-- nested annonymous class
+  - 클래스 안에 선언된 static 클래스로 한 곳에서만 사용되는 클래스를 논리적으로 묶어
+- inner class
+  - 클래스 안에 static 없이 선언된 클래스로 local inner class와 anonymous inner class로 나뉜다.
+  - Local inner class
+  - Anonymous inner class
+
+```java
+public class OuterClass {
+  static class StaticNestedClass {}
+
+  class LocalInnerClass {}
+}
+```
 
 ## 어노테이션이라는 것도 알아야 한다
 
