@@ -7,11 +7,11 @@
 
 ## 2장 Hello God Of Java
 
-자바로 프로그래밍을 하기 위해선 JDK(Java Development Kit)와 개발 에디터를 설치해야 한다.
+자바로 프로그래밍을 하기 위해선 JDK(Java Development Kit)를 설치해야 한다.
 .java 확장자로 되어 있는 소스를 컴파일하면 .class 확장자를 가진 파일이 생성되어 디스크에 저장된다.
 컴파일을 마친 클래스 파일은 JVM에서 읽어서 운영체제에서 실행된다.
 
-자바를 컴파일하기 위해서는 클래스의 이름과 파일이름이 같아야 한다.
+자바를 컴파일하기 위해서는 public 클래스의 이름과 파일이름이 같아야 한다.
 실행을 목적으로 한 자바 클래스는 메인 메소드가 필요하다.
 클래스 파일을 실행하면 메인 메서드가 실행된다.
 
@@ -123,7 +123,7 @@ short shortValue = 128;
 byte byteValue = (byte)shortValue;
 ```
 
-범위가 큰 타입을 작은 타입으로 바꾸면 생각지도 모한 값이 나올 수 있으므로 신중히 형 변환을 해야 한다.
+범위가 큰 타입을 작은 타입으로 바꾸면 생각지도 못한 값이 나올 수 있으므로 신중히 형 변환을 해야 한다.
 
 ## 6장 제가 조건을 좀 따져요
 
@@ -914,6 +914,8 @@ public class MemberManager implements IMemberManager {
 
 ### 추상클래스
 
+추상클래스는 인터페이스와 비슷하지만 메서드의 몸통(body)를 미리 개발해둘 수 있다.
+
 추상클래스의 특징은 다음과 같다
 
 - 추상클래스는 `class` 앞에 `abstract` 예약어를 붙여 선언할 수 있다.
@@ -926,8 +928,10 @@ public class MemberManager implements IMemberManager {
 
 ```java
 public abstract class MemberManagerAbstract {
-    public boolean addMember(MemberDTO member);
+  public boolean addMember(MemberDTO member);
+
   public boolean deleteMember(number id);
+
   public void printLog(String data) {
     System.out.println("Data= " + data);
   }
@@ -935,8 +939,14 @@ public abstract class MemberManagerAbstract {
 ```
 
 ```java
-
-
+public class MemberManager extends MemberManagerAbstract {
+  public boolean addMemeber(MemberDTO member) {
+    return false;
+  }
+  public boolean deleteMember(number id) {
+    return false;
+  }
+}
 ```
 
 ### 인터페이스와 추상클래스의 차이
