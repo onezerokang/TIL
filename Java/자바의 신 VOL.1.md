@@ -657,7 +657,7 @@ Parent parent = new Child();
 Child child = (Child)parent;
 ```
 
-= **형변환이 안되는 예시**
+- **형변환이 안되는 예시**
 
 ```java
 Parent parent = new Parent();
