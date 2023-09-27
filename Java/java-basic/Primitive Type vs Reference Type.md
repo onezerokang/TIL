@@ -20,14 +20,14 @@
   - Reference Type: 사용 가능
 - **접근 속도**:
   - Primitive Type: Stack에서 바로 값을 읽어오기 때문에 일반적으로 Reference Type보다 빠르다.
-  - Reference: Heap에서 데이터를 읽어와야 하며, Wrapper 클래스를 사용할 경우 unboxing 과정의 오버헤드가 있을 수 있다.
+  - Reference Type: Heap에서 데이터를 읽어와야 하며, Wrapper 클래스를 사용할 경우 unboxing 과정의 오버헤드가 있을 수 있다.
 - **메모리 양(JVM 구현에 따라 실제 크기는 다를 수 있다)**:
   - Primitive Type: 1byte ~ 8byte의 크기를 갖는다.
   - Wrapper Class: 128bits ~ 192bits의 크기를 갖는다.
 
 ## 결론
 
-성능과 메모리에 장점이 있는 Primitive Type을 먼저 고려한다. 만약 Null을 다루거나 제네릭 타입에서 사용되어야 한다면 Reference Type을 사용한다.
+성능과 메모리 효율성 면에서는 Primitive Type을 우선적으로 고려해야 한다. 그러나 null 값 처리나 제네릭 타입이 필요한 경우에는 Reference Type을 사용하는 것이 적절하다.
 
 ## 참조
 
