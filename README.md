@@ -1,5 +1,11 @@
 # TIL
 
+## Java
+
+### java.lang
+
+- [equals와 hashCode](/Java/java-lang/equals와%20hashCode.md)
+
 ## DataBase
 
 - [index란?](/Database/index란%3F.md)
