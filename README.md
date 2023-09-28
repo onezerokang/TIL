@@ -5,6 +5,7 @@
 ### Java Basic
 
 - [Primitive Type vs Reference Type](/Java/java-basic/Primitive%20Type%20vs%20Reference%20Type.md)
+- [Enum](/Java/java-basic/Enum.md)
 
 ### java.lang
 
