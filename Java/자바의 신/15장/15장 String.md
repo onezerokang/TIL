@@ -69,7 +69,7 @@ String 생성자 중에서 그나마 많이 사용하는 생성자는 다음과 
 ```java
 public class StringCompare {
     public static void main(String[] args) {
-                String text = "Check value";
+        String text = "Check value";
         String text2 = "Check value";
 
 
