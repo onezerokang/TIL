@@ -6,6 +6,7 @@
 
 - [Primitive Type vs Reference Type](/Java/java-basic/Primitive%20Type%20vs%20Reference%20Type.md)
 - [Enum](/Java/java-basic/Enum.md)
+- [Deep Copy vs Shallow Copy](/Java/java-basic/Deep%20Copy%20vs%20Shallow%20Copy.md)
 
 ### Data Type
 
