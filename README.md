@@ -7,6 +7,10 @@
 - [Primitive Type vs Reference Type](/Java/java-basic/Primitive%20Type%20vs%20Reference%20Type.md)
 - [Enum](/Java/java-basic/Enum.md)
 
+### Data Type
+
+- [float vs double](/Java/data-type/float%20vs%20double.md)
+
 ### java.lang
 
 - [equals와 hashCode](/Java/java-lang/equals와%20hashCode.md)
