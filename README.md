@@ -29,6 +29,10 @@
 
 - [String vs StringBuilder vs StringBuffer](/Java/String/String%20vs%20StringBuilder%20vs%20StringBuffer.md)
 
+### JVM
+
+- [컴파일 언어 vs 인터프리터 언어](/Java/JVM/컴파일%20언어%20vs%20인터프리터%20언어.md)
+
 ## DataBase
 
 - [index란?](/Database/index란%3F.md)
