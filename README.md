@@ -7,6 +7,7 @@
 - [Primitive Type vs Reference Type](/Java/java-basic/Primitive%20Type%20vs%20Reference%20Type.md)
 - [Enum](/Java/java-basic/Enum.md)
 - [Deep Copy vs Shallow Copy](/Java/java-basic/Deep%20Copy%20vs%20Shallow%20Copy.md)
+- [동일성(Identity) vs 동등성(Equality)](</Java/java-basic/동일성(Identity)%20vs%20동등성(Equality).md>)
 
 ### Data Type
 
