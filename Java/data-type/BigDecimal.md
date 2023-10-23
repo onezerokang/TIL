@@ -38,9 +38,9 @@ System.out.println(a.subtract(b)); // 0.61
 
 BigDecimal은 정수형인 unscaled value와 소수점 오른쪽의 자리수를 나타내는 32비트 정수인 scale로 구성된다. 예를 들어 1.23의 unscaled value는 123이고 scale은 2가 된다.
 
-BigInteger가 연산하는 과정은 다음과 같다.
+BigDecimal가 연산하는 과정은 다음과 같다.
 
-1. 정수 값(unscaled valuee)과 정밀도(scale)를 나눠서 저장한다. 예를 들어 1.23의 경우 정수 값은 123이고 scale은 2다.
+1. 정수 값(unscaled value)과 정밀도(scale)를 나눠서 저장한다. 예를 들어 1.23의 경우 정수 값은 123이고 scale은 2다.
 2. 정수 값에 연산을 수행하고 정밀도를 적용하여 최종 결과를 나타내어 정확한 계산을 한다.
 
 ## 4. BigDecimal 연산 방법
@@ -149,7 +149,7 @@ BigDecimal.valueOf(1.12); // 1.12
 ### 6.3. 동등성 비교 시 compareTo()와 equals() 사용을 구분하기
 
 - equals(): 정수값(unscaled value)와 정밀도(scale)을 모두 비교
-- compareTo(): 정수값(unscaled value)만 비교
+- compareTo(): 숫자값만 비교
 
 ## 7. 참조
 
