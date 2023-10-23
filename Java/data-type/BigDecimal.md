@@ -60,8 +60,8 @@ System.out.println(a.subtract(b));
 // 곱하기
 System.out.println(a.multiply(b));
 
-// 나누기
-System.out.println(a.divide(b)); // ArithmeticException
+// 소수점 아래 둘째 자리까지 반올림
+System.out.println(a.divide(b), 2, RoundingMode.HALF_UP);
 
 // 나머지
 System.out.println(a.remainder(b));
