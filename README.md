@@ -12,6 +12,8 @@
 ### Data Type
 
 - [float vs double](/Java/data-type/float%20vs%20double.md)
+- [BigInteger](/Java/data-type/BigInteger.md)
+- [BigDecimal](/Java/data-type/BigDecimal.md)
 
 ### java.lang
 
