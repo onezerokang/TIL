@@ -45,6 +45,8 @@ BigInteger가 연산하는 과정은 다음과 같다.
 
 ## 4. BigDecimal 연산 방법
 
+### 4.1. 사칙 연산
+
 ```java
 BigDecimal a = new BigDecimal("7");
 BigDecimal b = new BigDecimal("3");
@@ -73,6 +75,24 @@ System.out.println(a.min(b));
 
 // 부호 변환
 System.out.println(a.negate());
+```
+
+### 4.2. 비교 연산
+
+비교 연산에는 equals()와 compareTo()를 사용할 수 있다. 두 메서드의 차이는 다음과 같다.
+
+- **equals()**: unscaled value와 scale을 모두 비교한다.
+- **compareTo()**: 두 객체의 숫자값만 비교한다. 따라서 소수점 맨 끝의 0을 무시하고 비교하고 싶다면 compareTo()를 사용해야 한다.
+
+```java
+BigDecimal a = new BigDecimal("1.23");
+BigDecimal b = new BigDecimal("1.230");
+
+System.out.println(a == b); // false: 메모리 주소 비교
+
+System.out.println(a.equals(b));; // scale까지 비교
+
+System.out.println(a.compareTo(b) == 0); // 숫자만 비교
 ```
 
 ## 5. 소수점 처리 전략
