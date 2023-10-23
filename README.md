@@ -24,6 +24,8 @@
 
 ### Collection
 
+- List
+  - [ArrayList의 내부 구현](/Java/Collection/List/ArrayList의%20내부%20구현.md)
 - [Stack](/Java/Collection/Stack.md)
 
 ### String
