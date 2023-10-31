@@ -51,6 +51,11 @@
 
 - [컴퓨터가 수를 표현하는 방법](/Computer-System/컴퓨터가%20수를%20표현하는%20방법.md)
 
+## Network
+
+- [TCP vs UDP](/Network/TCP%20vs%20UDP.md)
+- [HTTPS](/Network/HTTPS.md)
+
 ## 자바의 신
 
 - [1장: 프로그래밍이란 무엇인가?](/Java/자바의%20신/1장%20프로그래밍이란%20무엇인가%3F.md)
