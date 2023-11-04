@@ -4,6 +4,8 @@
 
 오늘은 Java, JVM, JDK, JRE가 무엇이고 서로 어떻게 다른지 알아보자.
 
+![JVM, JRE, JDK](JVM-JRE-JDK.png)
+
 ## Java
 
 Java는 프로그래밍 언어 자체를 말한다. Java로 작성된 코드는 자바 컴파일러에 의해 바이트코드(.class 파일)로 컴파일되며 JVM 위에서 실행된다.
