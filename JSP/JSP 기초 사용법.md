@@ -327,6 +327,56 @@ request 기본 객체가 제공하는 기능은 다음과 같이 구분된다.
 
 ## response 기본 객체
 
+response 기본 객체는 클라이언트에게 보내는 응답 정보를 담는다.
+
+response 기본 객체가 응답 정보와 관련해서 제공하는 기능은 다음과 같다.
+
+- 헤더 정보 입력
+- 리다이렉트 하기
+
+### 웹 브라우저에 헤더 정보 전송하기
+
+- addDateHeader(String name, long date)
+- addHeader(String name, String value)
+- addIntHeader(String name, int value)
+- setDateHeader(String name, long date)
+- setHeader(String name, String value)
+- setIntHeader(String name, int value)
+- containsHeader(String name)
+
+응답 헤더를 직접 설정해야 하는 경우가 많진 않은데, 그중 하나는 캐시와 관련된 것이다.
+
+### 웹 브라우저 캐시 제어를 위한 응답 헤더 입력
+
+JSP를 비롯한 웹 어플리케이션을 개발하다보면 새로운 내용을 DB에 추가했는데도 웹 브라우저에 출력되는 내용이 바뀌지 않는 경우가 있다. 이는 웹 브라우저가 서버가 생성한 결과를 출력하지 않고 캐시에 저장된 데이터를 출력하기 때문이다.
+
+내용이 자주 바뀌지 않는 사이트는 웹 브라우저 캐시를 사용해서 보다 빠른 응답을 제공할 수 있다. 하지만, 게시판처럼 내용이 자주 변경되는 사이트는 웹 브라우저 캐시가 적용되면 변경된 내용을 확인할 수 없게 된다.
+
+HTTP는 응답 헤더를 ㄹ통해 웹 브라우저가 응답 결과를 캐시할지에 대한 여부를 설정할 수 있다.
+
+- Cache-Control: 이 헤더의 값을 no-cache로 지정 시 응답 결과를 캐시하지 않는다.
+- Pragma: no-cache로 지정하면 ㄴ웹 브라우저는 응답 결과를 캐시에 저장하지 않는다.
+- Expires: 응답 결과의 만료일을 지정한다.
+
+Cache-Control은 HTTP 1.1 버전에서만 유효하기에 Pragma 또한 no-cache로 설정해주자.
+
+```jsp
+<%
+  response.setHeader("Cache-Control", "no-cache");
+  response.addHeader("Cache-Control", "no-store");
+  response.setHeader("Pragma", "no-cache");
+  response.setDateHeader("Expires", 1L);
+%>
+```
+
+### 리다이렉트를 이용해서 페이지 이동하기
+
+리다이렉트란 웹 서버가 웹 브라우저에게 다른 페이지로 이동하라고 응답하는 기능이다.
+
+- response.sendRedirect(String location)
+
+웹 서버에 전송할 파라미터 값은 알맞게 인코딩해야 한다. java.net.URLEncoder 클래스를 사용해 문자열을 인코딩해주자.
+
 ## 참조
 
 - 최범균의 JSP 2.3 웹 프로그래밍 : 기초부터 중급까지, 최범균, CHAPTER 03 JSP로 시작하는 웹 프로그래밍
