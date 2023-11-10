@@ -41,6 +41,11 @@
 - [컴파일 언어 vs 인터프리터 언어](/Java/JVM/컴파일%20언어%20vs%20인터프리터%20언어.md)
 - [Java vs JVM vs JDK vs JRE](/Java/JVM/Java%20vs%20JVM%20vs%20JRE%20vs%20JDK.md)
 
+## JSP
+
+- [JSP 기초 사용법](/JSP/JSP%20기초%20사용법.md)
+- [JSP 필수 이해 요소](/JSP/JSP%20필수%20이해%20요소.md)
+
 ## DataBase
 
 - [index란?](/Database/index란%3F.md)
