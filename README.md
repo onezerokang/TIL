@@ -14,6 +14,7 @@
 - [float vs double](/Java/data-type/float%20vs%20double.md)
 - [BigInteger](/Java/data-type/BigInteger.md)
 - [BigDecimal](/Java/data-type/BigDecimal.md)
+- [형 변환(Type Conversion)](</Java/data-type/형%20변환(Type%20Conversion).md>)
 
 ### java.lang
 
