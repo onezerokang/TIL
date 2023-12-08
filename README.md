@@ -24,6 +24,11 @@
 
 - [Overloading vs Overriding](/Java/oop/Overloading%20vs%20Overriding.md)
 - [Class vs Object](/Java/oop/Class%20vs%20Object.md)
+- 객체 지향의 4대 특성
+  - 추상화
+  - 상속
+  - 캡슐화
+  - 다형성
 
 ### Collection
 
@@ -81,6 +86,8 @@
 - [17장: 어노테이션이라는 것도 알아야 한다.](/Java/자바의%20신/17장%20어노테이션이라는%20것도%20알아야%20한다.md)
 
 ## Test
+
+- [단위 테스트 vs 통합 테스트](/Test/단위%20테스트%20vs%20통합%20테스트.md)
 
 ## Data Structure
 
