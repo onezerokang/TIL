@@ -23,7 +23,7 @@ public static void main(String[] args) {
 
 StringBuilder와 StringBuffer는 변경 가능(mutable)한 객체다.
 
-문자열을 더 하더라도 새로운 객체를 만드는 것이 아닌, 기존 객체에 문자열을 더한다. 때문에 String과 비교했을 때 메모리 효율과 시간 효율이 더 좋다.
+문자열을 더 하더라도 새로운 객체를 만드는 것이 아닌, 기존 객체에 문자열을 더한다. String 더하기 연산 같이 객체를 새로 생성하고 기존 값 값을 복사하는 과정이 없기 때문에 String의 더하기 연산보다 시간 효율이 더 좋다.
 
 다음은 StringBuilder를 사용하여 문자열을 더하는 예시다.
 
