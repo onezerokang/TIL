@@ -22,13 +22,9 @@
 
 ### OOP
 
+- [객체지향 프로그래밍](/Java/oop/객체지향%20프로그래밍.md)
 - [Overloading vs Overriding](/Java/oop/Overloading%20vs%20Overriding.md)
 - [Class vs Object](/Java/oop/Class%20vs%20Object.md)
-- 객체 지향의 4대 특성
-  - 추상화
-  - 상속
-  - 캡슐화
-  - 다형성
 
 ### Collection
 
