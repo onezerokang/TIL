@@ -23,6 +23,7 @@
 ### OOP
 
 - [객체지향 프로그래밍](/Java/oop/객체지향%20프로그래밍.md)
+- [SOLID 원칙](/Java/oop//SOLID%20원칙.md)
 - [Overloading vs Overriding](/Java/oop/Overloading%20vs%20Overriding.md)
 - [Class vs Object](/Java/oop/Class%20vs%20Object.md)
 
@@ -33,6 +34,7 @@
 - [Stack](/Java/Collection/Stack.md)
 - Map
   - [HashMap의 내부 구현](/Java/Collection/Map/HashMap의%20내부%20구현.md)
+- [Queue](/Java/Collection/Queue/Queue.md)
 
 ### String
 
