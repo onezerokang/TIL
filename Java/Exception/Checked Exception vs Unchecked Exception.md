@@ -16,6 +16,8 @@ Checked Exception이란 컴파일러가 체크하는 예외를 말한다. 만약
 - FileNotFoundException
 - SQLException
 
+복구 가능한 예외
+
 ## Unchecked Exception
 
 Unchekced Exception이란 런타임(프로그램 실행 중)에서 발생할 수 있는 예외를 말한다. 예외 처리를 해주지 않아도 컴파일 에러는 발생하지 않지만, 프로그램이 비 정상적으로 종료될 수 있다.
@@ -24,6 +26,8 @@ Unchekced Exception이란 런타임(프로그램 실행 중)에서 발생할 수
 
 - NullPointerException
 - ArrayIndexOutOfBoundsException
+
+복구가 어려운 예외
 
 ## Exception handling
 
