@@ -1365,3 +1365,312 @@ public void upgradeAllOrNoting() throws Exception {
 #### 어드바이스와 포인트컷의 재사용
 
 ProxyFactoryBean은 스프링 DI와 템플릿/콜백 패턴, 서비스 추상화 등의 기법이 모두 적용됐다. 그 덕분에 독립적이며, 여러 프록시가 공유할 수 있는 어드바이스와 포인트컷으로 확장 기능을 분리할 수 있었다. 이제 UserService 외에 새로운 비즈니스 로직을 담은 서비스 클래스가 만들어져도 이미 만들어둔 TransactionAdvice를 그대로 재사용할 수 있다.
+
+## 스프링 AOP
+
+지금까지 비즈니스 로직의 반복적으로 작성된 트랜잭션 코드를 깔끔하게 분리하는 작업을 했다.
+
+### 자동 프록시 생성
+
+부가기능을 제공하는 과정에서 타깃 코드는 깔끔해졌고, 부가기능은 한 번만 만들어 모든 타깃과 메소드에 재사용이 가능하며, 타깃의 적용 메소드를 선정하는 방식도 독립적으로 작성할 수 있도록 분리되었다.
+
+하지만 한 가지 더 해결해야 할 문제가 남아 있다. 부가기능의 적용이 필요한 타깃 오브젝트마다 거의 비슷한 내용의 ProxyFactoryBean 빈 설정정보를 추가해주는 부분이다.
+
+```xml
+<bean id="userService" class="org.springframework.aop.framework.ProxyFactoryBean">
+    <property name="target" ref="userServiceImpl" />
+    <property name="interceptorNames">
+        <list>
+            <value>transactionAdvisor</value>
+        </list>
+    </property>
+</bean>
+```
+
+target 프로퍼티를 제외하면 빈 클래스의 종류, 어드바이스, 포인트컷의 설정이 중복된다. 이런 류의 중복은 제거할 수 없을까?
+
+#### 빈 후처리기를 이용한 자동 프록시 생성기
+
+스프링은 OCP의 가장 중요한 요소인 유연한 확장이라는 개념을 스프링 컨테이너 자신에게도 다양한 방법으로 제공하고 있다. 그래서 스프링은 컨테이너로서 제공하는 기능 중 변하지 않는 핵심적인 부분외에는 대부분 확장할 수 있도록 확장 포인트를 제공한다.
+
+그중 관심을 가질 만한 확장 포인트는 BeanPostProcessor 인터페이스를 구현해서 만든 빈 후처리기다. 빈 후처리기는 스프링 빈 오브젝트로 만들어지고 난 후에, 빈 오브젝트를 다시 가공할 수 있게 해준다.
+
+DefaultAdvisorAutoProxyCreator: 어드바이저를 이용한 자동 프록시 생성기로 스프링이 제공하는 빈 후처리기 중 하나다.
+
+빈 후처리기를를 스프링에 적용하려면 후처리기 자체를 빈으로 등록하면 된다. 스프링은 빈 후처리기가 빈으로 등록되어 있으면 빈 오브젝트가 생성될 때마다 빈 후처리이게 보내서 후처리 작업을 요청한다. 빈 후처리기는 빈의 프로퍼티를 수정하거나, 별도의 초기화 작업을 진행할 수 잆다. 심지어 만들어진 빈 오브젝트를 바꿔치기할 수도 있다.
+
+이를 잘 이용하면 스프링이 생성하는 빈 오브젝트 일부를 프록시로 포정하고, 프록시를 빈으로 대신 등록할 수도 있다. 바로 이것이 자동 프록시 생성 빈 후처리기다.
+
+1. 스프링은 빈 오브젝트가 만들어질 때마다 이를 빈 후처리기에 보낸다.
+2. DefaultAdvisorAutoProxyCreator는 전달받은 빈이 프록시 적용 대상인지 확인한다.
+3. 프록시 적용 대상이면 내장된 프록시 생성기에 현재 빈에 대한 프록시를 만들게 하고, 만들어진 프록시에 어드바이저를 연결한다.
+4. 빈 후처리기는 생성된 프록시를 컨테이너에게 돌려준다.
+5. 컨테이너는 빈 후처리가 돌려준 오브젝트를 빈으로 등록하고 사용한다.
+
+#### 확장된 포인트컷
+
+포인트 컷은 다음 두 가지 기능을 갖는다.
+
+1. 타깃 오브젝트의 메소드 중 어떤 메소드에 부가기능을 적용할지 선정
+2. 어떤 빈에 프록시를 적용할지를 선택
+
+```java
+public interface Pointcut {
+    ClassFilter getClassFilter(); // 프록시를 적용할 클래스인지 확인
+    MethodMatcher getMethodMatcher(); // 어드바이스를 적용할 메소드인지 확인
+}
+```
+
+ProxyFactoryBEan에서는 굳이 클래스 레벨의 필터를 필요 없었지만, 모든 빈에 대해 프록시 자동 적용 대상을 선별해야 하는 빈 후처리기인 DefaultAdvisorAutoProxyCreator는 클래스와 메소드 선정 알고리즘을 모두 갖고 있는 포인트컷이 필요하다(기존 사용한 NameMatchMethodPointcut은 클래스 필터 기능이 없다.)
+
+#### 포인트컷 테스트
+
+포인트컷의 기능을 간단한 학습 테스트로 확인해보자.
+
+Hello 인터페이스와 이를 구현한 HelloTarget, 그리고 부가기능인 HelloAdvice를 사용했던 DynamicProxyTest에 테스트 메소드를 추가한다.
+
+```java
+@Test
+public void classNamePointcutAdvice() {
+    NameMatchMethodPointcut classMethodPointcut = new NameMatchMethodPointcut() {
+        @Override
+        public ClassFilter getClassFilter() {
+            return new ClassFilter() { // 익명 내부 클래스 방식으로 클래스 정의
+                @Override
+                public boolean matches(Class<?> clazz) {
+                    return clazz.getSimpleName().startsWith("HelloT"); // 클래스 이름이 HelloT로 시작하는 것만 선정한다.
+                }
+            };
+        }
+    };
+
+    classMethodPointcut.setMappedName("sayH*"); // sayH로 시작하는 메소드 이름을 가진 메소드만 선정한다.
+
+    // 테스트
+    checkAdvice(new HelloTarget(), classMethodPointcut, true);
+
+    class HelloWorld extends HelloTarget {};
+    checkAdvice(new HelloWorld(), classMethodPointcut, false);
+
+    class HelloToby extends HelloTarget {};
+    checkAdvice(new HelloToby(), classMethodPointcut, true);
+
+}
+
+private void checkAdvice(Object target, Pointcut pointcut, boolean adviced) {
+    ProxyFactoryBean pfBean = new ProxyFactoryBean();
+    pfBean.setTarget(target);
+    pfBean.addAdvisor(new DefaultPointcutAdvisor(pointcut, new UppercaseAdvice()));
+    Hello proxiedHello = (Hello) pfBean.getObject();
+
+    if (adviced) {
+        // 메소드 선정 방식을 통해 어드바이스 적용
+        assertThat(proxiedHello.sayHello("Toby")).isEqualTo("HELLO TOBY");
+        assertThat(proxiedHello.sayHi("Toby")).isEqualTo("HI TOBY");
+        assertThat(proxiedHello.sayThankYou("Toby")).isEqualTo("Thank You Toby");
+    } else {
+        // 어드바이스 적용 대상 후보에서 야예 탈락
+        assertThat(proxiedHello.sayHello("Toby")).isEqualTo("Hello Toby");
+        assertThat(proxiedHello.sayHi("Toby")).isEqualTo("Hi Toby");
+        assertThat(proxiedHello.sayThankYou("Toby")).isEqualTo("Thank You Toby");
+    }
+}
+```
+
+- 포인트컷은 NameMatchMethodPointcut을 내부 익명 클래스 방식으로 확장해서 만들었다.
+- 클래스 필터를 통과하지 못한 HelloWorld 클래스는 UppercaseAdvice를 제공받지 못한다.
+
+### DefaultAdvisorAutoProxyCreator의 적용
+
+프록시 자동생성 방식에서 사용할 포인트컷을 만드는 방법을 학습 테스트를 만들면서 살펴봤으니, 실제로 적용해보자.
+
+#### 클래스 필터를 적용한 포인트컷 작성
+
+만들어야 할 클래스는 하나뿐이다. 메소드 이름만 비교하던 포인트컷인 NameMatchMethodPointcut을 상속해서 프로퍼티로 주어진 이름 패턴을 가지고 클래스 이름을 비교하는 ClassFilter를 추가하도록 만들 것이다.
+
+```java
+public class NameMatchClassMethodPointcut extends NameMatchMethodPointcut {
+    public void setMappedClassName(String mappedClassName) {
+        // 모든 클래스를 다 허용하던 디폴트 클래스 필터를 프로퍼티로 받은 클래스 이름을 적용해서 필터를 만들어 덮어씌운다.
+        this.setClassFilter(new SimpleClassFilter(mappedClassName));
+    }
+
+    static class SimpleClassFilter implements ClassFilter {
+        String mappedName;
+
+        private SimpleClassFilter(String mappedName) {
+            this.mappedName = mappedName;
+        }
+
+        public boolean matches(Class<?> clazz) {
+            // simpleMatch: 와일드 카드가 들어간 문자열 비교를 지원하는 스프링의 유틸리티 메소드
+            return PatternMatchUtils.simpleMatch(mappedName, clazz.getSimpleName());
+        }
+    }
+}
+```
+
+#### 어드바이저를 이용하는 자동 프록시 생성기 등록
+
+적용할 자동 프록시 생성기인 DefaultAdvisorAutoProxyCreator는 등록된 빈 중에서 Advisor 인터페이스를 구현한 것들을 모두 찾는다. 그리고 생성되는 모든 빈에 대해 어브다이저의 포인트컷을 적용해보면서 프록시 적용 대상을 선정한다. 빈 클래스가 선정 대상이라면 프록시를 만들어 원리 빈 오브젝트와 바꿔치기한다.
+
+DefaultAdvisorAutoProxyCreator 등록은 다음 한 줄이면 충분하다.
+
+```xml
+<bean class = "org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator" />
+```
+
+이 빈 정의에는 id 속성이 없는 데, 다른 빈에서 참조하거나 코드에서 빈 이름으로 조회될 필요가 없는 빈이라면 아이디를 등록하지 않아도 되기 때문이다.
+
+#### 포인트컷 등록
+
+다음과 같이 기존 포인트컷 설정을 삭제하고 새로 만든 클래스 필터 지원 포인트컷을 빈으로 등록한다.
+
+```xml
+<bean id="transactionPointcut" class="kang.onezero.tobyspring.user.service.NameMatchClassMethodPointcut">
+    <property name="mappedClassName" value="*ServiceImpl" /> <!--   클래스 이름 패턴     -->
+    <property name="mappedName" value="upgrade*" /> <!--   메소드 이름 패턴     -->
+</bean>
+```
+
+#### 어드바이스와 어드바이저
+
+어드바이스인 transactionAdvice 빈 설정은 수정할 게 없다.
+
+어드바이저인 transactionAdvisor 빈도 수정할 게 없다. 하지만 어드바이저 사용 방법이 변경되었는 데, 기존 ProxyFactoryBean으로 등록한 빈에서 transactionAdvisor를 명시적으로 DI하지 않고, 어드바이저를 이용하는 자동 프록시 생성기인 DefaultAdvisorAutoProxyCreator에 의해 자동 수집돼고, 생성된 프록시에 다이내믹하게 DI 된다.
+
+#### ProxyFactoryBean 제거와 서비스 빈의 원상 복구
+
+프록시를 도입했을 때부터 아이디를 바꾸고 프록시에 DI 돼서 간접적으로 사용해야 했던 userServiceImpl 빈 아이디를 userService로 되돌려놓을 수 있다ㅏ. 더 이상 명시적인 프록시 팩토리 빈을 등록하지 않기 때문이다. ProxyFactoryBean 타입의 빈도 삭제해버리자.
+
+```xml
+<!-- 기존 설정 -->
+<bean id="userService" class="org.springframework.aop.framework.ProxyFactoryBean">
+    <property name="target" ref="userServiceImpl" />
+    <property name="interceptorNames">
+        <list>
+            <value>transactionAdvisor</value>
+        </list>
+    </property>
+</bean>
+<bean id="userServiceImpl" class="kang.onezero.tobyspring.user.service.UserServiceImpl">
+    <property name="userDao" ref="userDao" />
+    <property name="mailSender" ref="mailSender" />
+</bean>
+```
+
+```xml
+<!-- 수정된 설정 -->
+<bean id="userService" class="kang.onezero.tobyspring.user.service.UserServiceImpl">
+    <property name="userDao" ref="userDao" />
+    <property name="mailSender" ref="mailSender" />
+</bean>
+```
+
+#### 자동 프록시 생성기를 사용하는 테스트
+
+다시 테스트다. @Autowired를 통해 컨텍스트에서 가져온 UserService 타입 오브젝트는 트랜잭션이 적용된 프록시여야 한다. 지금까지는 ProxyFactoryBean이 빈으로 등록되어 있어 이를 가져와 타깃을 테스트용 클래스로 바꿔치기하는 방법을 상요했다. 하지만 자동 프록시 생성기를 적용한 후에는 더 이상 팩토리 빈이 존재하지 않는다.
+
+지금까지는 설정 파일에 정상적인 경우의 빈 설정만을 두고 롤백을 일으키는 예외 상황에 대한 테스트는 테스트 코드에서 빈을 가져와 수동 DI로 구성을 바꿔서 사용했다.
+
+하지만 자동 프록시 생성기라는 스플이 컨테이너에 종속적인 기법을 사용했기 때문에 예외상황을 위한 테스트 대상도 빈으로 등록해줘야 한다.
+
+이제 타깃을 코드에서 바꿔치기 할 방법도 없고, 자동 프록시 생성기의 적용이 되는지도 빈을 통해 확인할 필요가 있기 떄문이다.
+
+기존에 만들었떤 TestUserService 클래스를 직접 빈으로 등록하자. 그런데 두 가지 문제가 있다.
+
+1. TestUserService가 UserServiceTest 내부에 정의된 스태틱 클래스라는 점
+2. 포인트컷이 트랜잭션 어드바이스를 적용해주는 대상 클래스의 이름 패턴이 \*ServiceImpl이라고 되어 있어 TestUserService는 빈으로 등록해도 포인트컷이 프록시 적용 대상으로 선정해주지 않는다.
+
+위 문제를 해결하기 위해 TestUserService 스태틱 멤버 클래스를 수정하자.
+
+1. 스태틱 클래스 자체는 빈을 등록할 때 이름을 지정하는 방법만 알면 아무런 문제가 없다.
+2. TestUserService 클래스 이름을 TestUserServiceImpl로 변경하자.
+3. 테스트 코드에서 생성할 것이 아니기에 테스트 픽스처로 만든 users 리스트에서 예외를 발생시킬 기준 id를 가져와 사용할 방법이 없다. 그러므로 아예 예외를 발생시킬 대상인 네 번째 사용자 아이디를 클래스에 넣어버리자.
+
+```java
+static class TestUserServiceImpl extends UserServiceImpl {
+    private String id = "m_gumayusi"; // 텍스트 픽스쳐의 users(3)의 id 값을 고정
+
+    @Override
+    protected void upgradeLevel(User user) {
+        if (user.getId().equals(this.id)) throw new TestUserServiceException();
+        super.upgradeLevel(user);
+    }
+}
+```
+
+이제 TestUserServiceImpl을 빈으로 등록하자.
+
+```xml
+<bean id="testUserService"
+    class="kang.onezero.tobyspring.user.service.UserServiceTest$TestUserServiceImpl"
+    parent="userService" /> <!-- 프로퍼티 정의를 포함해서 userService 빈의 설정을 상속받는다. -->
+```
+
+마지막으로 upgradeAllOrNoting() 테스트를 새로 추가한 testUserService 빈을 사용하도록 수정하자.
+
+```java
+public class UserServiceTest {
+    @Autowired UserService userService;
+    @Autowired UserService testUserService; // 같은 타입의 빈이 두 개 존재하여 필드 이름을 기준으로 주입될 빈이 결정된다.
+
+    // 스프링 컨텍스트의 빈 설정을 변경하지 않으므로 @DirtiesContext 어노테이션은 제거됐다.
+    @Test
+    public void upgradeAllOrNoting() throws Exception {
+        userDao.deleteAll();
+        for(User user: users) userDao.add(user);
+
+        try {
+            this.testUserService.upgradeLevels();
+            fail("TestUserServiceException expected");
+        } catch (TestUserServiceException e) {
+        }
+        checkLevelUpgraded(users.get(1), false);
+    }
+}
+```
+
+이테 테스트를 실해앻서 모든 기능이 정상적으로 동작하는지 확인하자. 특히 upgradeAllOrNoting() 테스트를 통해 자동 프록시 생성기가 평범한 비즈니스 로직만 담고 있는 userService 빈을 자동으로 트랜잭션 부가기능을 제공해주는 프록시로 대체했는지 확인해보자.
+
+#### 자동생성 프록시 확인
+
+### 포인트컷 표현식을 이용한 포인트컷
+
+#### 포인트컷 표현식
+
+#### 포인트컷 표현식 문법
+
+#### 포인트컷 표현식 테스트
+
+#### 포인트컷 표현식을 이용하는 포인트컷 적용
+
+#### 타입 패턴과 클래스 이름 패턴
+
+### AOP란 무엇인가?
+
+#### 트랜잭션 서비스 추상화
+
+#### 프록시와 데코레이터 패턴
+
+#### 다이내믹 프록시와 프록시 팩토리 빈
+
+#### 자동 프록시 생성 방법과 포인트 컷
+
+#### 부가기능의 모듈화
+
+#### AOP: 애스펙트 지향 프로그래밍
+
+### AOP 적용기술
+
+#### 프록시를 이용한 AOP
+
+#### 바이트코드 생성과 조작을 통한 AOP
+
+### AOP의 용어
+
+### AOP 네임스페이스
+
+#### AOP 네임스페이스
+
+#### 어드바이저 내장 포인트컷
