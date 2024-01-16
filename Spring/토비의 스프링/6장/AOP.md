@@ -1635,17 +1635,212 @@ public class UserServiceTest {
 
 #### 자동생성 프록시 확인
 
+이제 실제로 프록시가 자동으로 만들어졌는지 직접 확인해보자.
+
+지금까지 트랜잭션 어드바이스를 적용한 프록시 자동생성기를 빈 후처리기 매커니즘을 통해 적용했다. 최소한 두 가지는 확인해야 한다.
+
+1. 트랜잭션이 필요한 빈에 트랜잭션 부가기능이 적용됐는가(upgradeAllOrNoting() 테스트로 검증)
+2. 클래스 필터가 제대로 동작해서 프록시 생성 대상을 선별하고 있는지 여부를 확인
+   - 포인트컷 빈의 클래스 이름 패턴을 변경해서 testUserService 빈에 트랜잭션이 적용되지 않게 해보자.
+
+트랜잭션 포인트컷 빈의 클래스 필터용 이름 패턴인 mappedClassName을 수정하고 upgradeAllOrNoting() 테스트가 실패하는지 확인하자.
+
+```xml
+<bean id="transactionPointcut" class="kang.onezero.tobyspring.user.service.NameMatchClassMethodPointcut">
+    <!-- 클래스 이름 패턴 변경 -->
+    <property name="mappedClassName" value="*NotServiceImpl" />
+    <property name="mappedName" value="upgrade*" />
+</bean>
+```
+
 ### 포인트컷 표현식을 이용한 포인트컷
+
+이번에는 좀 더 편리한 포인트컷 작성 방법을 알아보자.
+
+스프링은 아주 간단하고 효과적인 방법으로 포인트컷의 클래스와 메소드를 선정하는 알고리즘을 작성할 수 있는 방법을 제공한다.
+
+이를 포인트컷 표현식(pointcut expression)이라고 부른다.
 
 #### 포인트컷 표현식
 
+포인트컷 표현식을 지원하는 포인트컷을 적용하려면 AspectJExpressionPointcut 클래스를 사용하면 된다.
+
+Pointcut 인터페이스를 구현하는 스프링의 포인트컷은 클래스 선정을 위한 클래스 필터와 메소드 선정을 위한 메소드 매처 두 가지를 각각 제공해야 했다.
+
+하지만 AspectJExpressionPointcut은 클래스와 메소드의 선정 알고리즘을 포인트컷 표현식을 이용해 한 번에 지정할 수 있게 해준다.
+
+학습 테스트를 만들어서 표현식의 사용 방법을 살펴보자.
+
+- 포인트컷의 선정 후보가 될 여러 개의 메소드를 가진 클래스
+
+```java
+public class Target implements TargetInterface {
+    @Override
+    public void hello() {}
+
+    @Override
+    public void hello(String a) {}
+
+    @Override
+    public int minus(int a, int b) throws RuntimeException { return 0; }
+
+    @Override
+    public int plus(int a, int b) { return 0; }
+
+    public void method() {}
+}
+```
+
+- 여러 개의 클래스 선정 기능을 확인하기 위해 만든 클래스
+
+```java
+public class Bean {
+    public void method() throws RuntimeException {}
+}
+```
+
 #### 포인트컷 표현식 문법
+
+AspectJ 포인트컷 표현식은 포인트컷 지시자를 이용해 작성한다. 대표적으로 사용되는 지시자는 execution()이다.
+
+- execution() 지시자를 사용한 포인트컷 표현식의 문법구조
+
+```
+execution([접근제어자 패턴] 리턴타입패턴 [타입패턴.]이름패턴 (타입패턴 | "..", ...) [throws 예외패턴] )
+```
+
+- Target 클래스의 minus() 메소드만 선정해주는 포인트컷 표현식 검증 테스트
+
+```java
+public class PointcutExpressionTest {
+    @Test
+    public void methodSignaturePointcut() throws SecurityException, NoSuchMethodException {
+        AspectJExpressionPointcut pointcut = new AspectJExpressionPointcut();
+        pointcut.setExpression("execution(public int " +
+                "kang.onezero.tobyspring.learningtest.pointcut.Target.minus(int,int) " +
+                "throws java.lang.RuntimeException)"); // Target 클래스 minus() 메소드 시그니처
+
+        // Target.minus()
+        // 클래스 필터와 메소드 매처를 가져와 각각 비교한다.
+        assertThat(pointcut.getClassFilter().matches(Target.class) &&
+                pointcut.getMethodMatcher().matches(
+                        Target.class.getMethod("minus", int.class, int.class), null)).isTrue();
+
+        // Target.plus()
+        // 메소드 매처에서 실패
+        assertThat(pointcut.getClassFilter().matches(Target.class) &&
+                pointcut.getMethodMatcher().matches(
+                        Target.class.getMethod("plus", int.class, int.class), null)).isFalse();
+
+        // Bean.method()
+        // 클래스 필터에서 실패
+        assertThat(pointcut.getClassFilter().matches(Bean.class) &&
+                pointcut.getMethodMatcher().matches(
+                        Target.class.getMethod("method", int.class, int.class), null)).isFalse();
+    }
+}
+```
+
+**추가할 라이브러리: runtimeOnly 'org.aspectj:aspectjweaver:1.9.21'**
 
 #### 포인트컷 표현식 테스트
 
+포인트컷 표현식에서 필수가 아닌 '접근제어자 패턴', '클래스 타입 패턴', '예외 패턴'은 생략이 가능하다(대신 좀 더 느슨한 포인트컷이 된다).
+
+```
+execution(int minus(int, int))
+```
+
+리턴 값의 타입에 대한 제한을 없애고 싶다면 와일드카드를 사용하면 된다.
+
+```
+execution(* minus(int, int))
+```
+
+파라미터의 개수와 타입을 무시하려면 () 안에 ..를 넣어준다.
+
+```
+execution(* minus(..))
+```
+
+모든 메소드를 다 허용하는 포인트컷이 필요하다면 메소드 이름도 와일드카드로 바꾸자.
+
+```
+execution(* *(..))
+```
+
+다양한 활용 방법을 보기 위해 테스트를 보충하자.
+
+- 포인트컷과 메소드를 비교해주는 테스트 헬퍼 메소드
+
+```java
+public void pointcutMatches(String expression, Boolean expected, Class<?> clazz,
+                            String methodName, Class<?>... args) throws Exception {
+    AspectJExpressionPointcut pointcut = new AspectJExpressionPointcut();
+    pointcut.setExpression(expression);
+
+    assertThat(pointcut.getClassFilter().matches(clazz)
+            && pointcut.getMethodMatcher().matches(clazz.getMethod(methodName, args), null)).isTrue();
+}
+```
+
+- 타깃 클래스의 메소드 6개에 대해 포인트컷 선정 여부를 검사하는 헬퍼 메소드
+
+```java
+public void targetClassPointcutMatches(String expression, boolean... expected) throws Exception {
+    pointcutMatches(expression, expected[0], Target.class, "hello");
+    pointcutMatches(expression, expected[1], Target.class, "hello", String.class);
+    pointcutMatches(expression, expected[2], Target.class, "plus", int.class, int.class);
+    pointcutMatches(expression, expected[3], Target.class, "minus", int.class, int.class);
+    pointcutMatches(expression, expected[4], Target.class, "method");
+    pointcutMatches(expression, expected[5], Bean.class, "method");
+}
+```
+
+- 포인트컷 표현식 테스트
+
+```java
+@Test
+public void pointuct() throws Exception {
+    targetClassPointcutMatches("execution(* *(..))", true, true, true, true, true, true);
+    // 나머지는 생략
+}
+```
+
 #### 포인트컷 표현식을 이용하는 포인트컷 적용
 
+AspectJ 포인트컷 표현식은 메소드를 선정하는 데 편리하게 쓸 수 있다.
+
+- AspectJ 포인트컷 표현식 스타일:
+  - 메소드의 시그니처를 비교하는 execution()
+  - 빈의 이름으로 비교하는 bean()
+  - 특정 어노테이션이 적용된 것을 선정하는 @annotation()
+
+이제 포인트컷 표현식을 사용하는 방법을 알았으니 적용해보자.
+
+먼저 앞서 만든 transactionPointcut 빈을 제거고, 기존 포인트컷과 동일한 기준으로 메소드를 선정하는 알고리즘을 가진 포인트컷 표현식을 만들어보자.
+
+```xml
+<!-- ServiceImpl로 끝나고 메소드 이름은 upgrade로 시작하는 모든 클래스에 적용되는 표현식 -->
+<bean id="transactionPointcut" class="org.springframework.aop.aspectj.AspectJExpressionPointcut">
+    <property name="expression" value="execution(* *..*ServiceImpl.upgrade*(..))" />
+</bean>
+```
+
+포인트컷 표현식을 사용하면 로직이 짧은 문자열에 담겨 코드와 설정이 단순해진다.
+
+반면 문자열 표현식이므로 런타임 시점까지 문법의 검증이나 기능 확인이 되지 않는다.
+
+포인트컷 표현식을 이용하는 포인트컷이 정확히 원하는 빈만 선정했는지 확인하는 일은 만만치 않다. 하지만 스프링 개발팀이 제공하는 지원툴을 사용하면 간단히 포인트컷이 선정한 빈을 한눈에 확인할 수 있다(VOL. 2 내용)
+
 #### 타입 패턴과 클래스 이름 패턴
+
+- 포인트컷 표현식 적용전에는 클래스 이름 패턴을 이용해 타깃 빈을 선정하는 포인트 컷 사용
+- 적용할 클래스 이름이 ServiceImpl로 통일되는 단점
+- 하지만 단순 클래스 이름 패턴과 포인트컷 표현식의 타입패턴은 중요한 차이점이 있다.
+  - 포인트컷 표현식의 클래스 이름에 적용되는 패턴은 클래스 이름 패턴이 아니라 타입 패턴이다.
+  - execution(\* *..*ServiceImpl.upgrade\*(..))는 TestUserService도 선정한다.
+  - TestUserService의 슈퍼 클래스는 UserServiceImpl이기 때문이다.
 
 ### AOP란 무엇인가?
 
