@@ -1992,7 +1992,7 @@ AspectJ 포인트컷 표현식을 활용한 포인트컷은 스트링으로 된 
 
 ```xml
 <aop:config>
-    <aop:advisor advice-ref="transactionAdvice" pointcut-ref="execution(* *..*ServiceImpl.upgrade*(..))"/>
+    <aop:advisor advice-ref="transactionAdvice" pointcut="execution(* *..*ServiceImpl.upgrade*(..))"/>
 </aop:config>
 ```
 
