@@ -90,6 +90,7 @@
 - 예외처리 전략
 - AOP
 - PSA
+- @Transactional
 
 ## Design Pattern
 
