@@ -46,9 +46,9 @@ docker rm <container_name>
 
 ## Docker Compose란
 
-Docker를 사용하여 포트를 다르게 설정했지만, 작업을 진행할 때마다 수동으로 컨테이너를 띄우고 내리는 번거로운 작업을 해야 한다. 지금은 MySQL만 사용하지만 사용하는 컨테이너가 늘어나면 더 번거로워질 것이다. 이런 문제를 해결할 수 있는 것이 바로 Docker Compose다.
+Docker를 사용하여 포트를 다르게 설정했지만, 작업을 진행할 때마다 수동으로 컨테이너를 띄우고 내리는 작업은 매우 번거롭다. 지금은 MySQL만 사용하지만 사용하는 컨테이너가 늘어나면 더 번거로워질 것이다. 이런 문제를 해결할 수 있는 것이 바로 Docker Compose다.
 
-Docker Compose는 Docker 컨테이너들을 어떻게 실행할지 정의하고 실행할 수 있는 툴이다. Docker Compose 설정 파일을 정의해두고 다음 명령어 한줄이면 정의한 컨테이너가 모두 실행된다.
+Docker Compose는 Docker 컨테이너들을 어떻게 실행할지 정의하고 실행할 수 있는 툴이다. Docker Compose 설정 파일을 정의해두고 다음 명령어 한줄이면 정의된 컨테이너가 모두 실행된다.
 
 ```shell
 # -d는 datach 모드로 도커 컨테이너를 백그라운드에서 실행되도록 한다.
@@ -57,7 +57,7 @@ docker-compose up -d
 
 ## Docker Compose로 MySQL 연동하기
 
-이제 Spring Boot와 MySQL을 연동해보자. 먼저 루트 디렉토리에 docker-compose.yml 파일을 작성한다.
+이제 Spring Boot 프로젝트에 Docker Compose를 이용하여 MySQL을 연동해보자. 먼저 루트 디렉토리에 docker-compose.yml 파일을 작성한다.
 
 ```yml
 version: "3.8"
