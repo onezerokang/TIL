@@ -183,6 +183,6 @@ jobs:
 
 ## 참조
 
-- [The JaCoCo Plugin](https://docs.gradle.org/current/userguide/jacoco_plugin.html)
-- [Gradle 프로젝트에 JaCoCo 설정하기](https://techblog.woowahan.com/2661/)
-- [코드 커버리지(Code Coverage)란?](https://hudi.blog/code-coverage/)
+- <a href="https://docs.gradle.org/current/userguide/jacoco_plugin.html" target="_blank">The JaCoCo Plugin</a>
+- <a href="https://techblog.woowahan.com/2661/" target="_blank">Gradle 프로젝트에 JaCoCo 설정하기</a>
+- <a href="https://hudi.blog/code-coverage/" target="_blank">코드 커버리지(Code Coverage)란?</a>
