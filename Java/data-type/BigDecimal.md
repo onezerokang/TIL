@@ -5,7 +5,7 @@
 BigDecimal은 금융 관련 연산 같이 오차가 발생해서 안되는 상황에 사용되는 타입이다. float, double과 BigDecimal을 간단하게 비교해보자(float과 double에 대한 자세한 내용은 [여기](/Java/data-type/float%20vs%20double.md)를 참고하세요).
 
 - **내부 표현 방식**:
-  - **BigDecimal**: 수를 정수(unscaled value)와 scale로 나눠서 표햔한다. 예를 들어 1.23의 정수는 123이고 scale은 2다.
+  - **BigDecimal**: 수를 정수(unscaled value)와 scale로 나눠서 표현한다. 예를 들어 1.23의 정수는 123이고 scale은 2다.
   - **float & double**: 부동 소수점 표현에 따라 표현한다.
 - **정밀도**:
   - **BigDecimal**: 임의 정밀도(메모리의 제한 내에서 원하는 만큼의 정밀도)를 갖는다.
