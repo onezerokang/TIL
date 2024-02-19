@@ -87,35 +87,35 @@
 - [16장: 클래스 안에 클래스가 들어갈 수도 있구나](/Java/자바의%20신/16장%20클래스%20안에%20클래스가%20들어갈%20수도%20있구나.md)
 - [17장: 어노테이션이라는 것도 알아야 한다.](/Java/자바의%20신/17장%20어노테이션이라는%20것도%20알아야%20한다.md)
 
-## Spring
+<!-- ## Spring
 
 - IoC/DI
 - 스프링 빈
 - 예외처리 전략
 - AOP
 - PSA
-- @Transactional
+- @Transactional -->
 
 ## Project Setting
 
 - [Docker Compose로 로컬 개발 환경 관리하기](/Spring/프로젝트%20세팅/Docker%20Compose로%20로컬%20개발%20환경%20관리하기.md)
+- [Jacoco와 Github Actions로 CI 구성하기](/Spring/프로젝트%20세팅/Jacoco와%20Github%20Actions로%20CI%20구성하기.md)
 
-## Design Pattern
+<!-- ## Design Pattern
 
 - 프록시 패턴
 - 데코레이터 패턴
 - 싱글톤 패턴
 - 템플릿 메소드 패턴
 - 팩토리 메소드 패턴
-- 전략 패턴
+- 전략 패턴 -->
 
 ## Test
 
 - [단위 테스트 vs 통합 테스트](/Test/단위%20테스트%20vs%20통합%20테스트.md)
-- JUnit
 
-## Data Structure
+<!-- ## Data Structure
 
 ## Network
 
-- [TCP]
+- [TCP] -->
