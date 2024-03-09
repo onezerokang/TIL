@@ -64,6 +64,9 @@ spring:
     url: # 생략
 ```
 
+- spring.config.activate.on-profile: 해당 프로필일 때 적용될 설정의 영역
+- spring.profiles.active: 프로필 지정(기본값은 default)
+
 ## 프로필 설정하기
 
 환경 별 사용할 설정 파일을 만들었다면 스프링 애플리케이션이 실행될 때 사용할 어떤 환경(프로필)을 사용할지 설정해줘야 한다.
