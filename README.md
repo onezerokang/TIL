@@ -55,9 +55,10 @@
 - [index란?](/Database/index란%3F.md)
 - [MySQL과 MongoDB의 차이점](/Database/MySQL과%20MongoDB의%20차이점.md)
 
-### Real MySQL 8.9
+### Real MySQL 8.0
 
 - [MySQL 아키텍처](/Database/Real%20MySQL/4장/MySQL%20아키텍처.md)
+- [MySQL의 격리 수준](/Database/Real%20MySQL/5장/MySQL의%20격리%20수준.md)
 
 ## OS
 
@@ -119,3 +120,7 @@
 ## Network
 
 - [TCP] -->
+
+## Querydsl
+
+- [Querydsl](/Querydsl/Querydsl.md)
