@@ -60,6 +60,10 @@
 - [MySQL 아키텍처](/Database/Real%20MySQL/4장/MySQL%20아키텍처.md)
 - [MySQL의 격리 수준](/Database/Real%20MySQL/5장/MySQL의%20격리%20수준.md)
 
+## JPA
+
+- [영속성 컨텍스트](/JPA/영속성%20컨텍스트.md)
+
 ## OS
 
 - [프로세스의 메모리 구조](/OS/프로세스의%20메모리%20구조.md)
