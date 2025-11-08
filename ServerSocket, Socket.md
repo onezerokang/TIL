@@ -82,11 +82,11 @@ public class Server {
                         output.close();
                         break;
                     }
+                    String response = request + " ACK";
+                    output.writeUTF(response);
+                    log.info("server -> client: {}", response);
                 }
 
-                String response = request + " ACK";
-                output.writeUTF(response);
-                log.info("server -> client: {}", response);
 
                 input.close();
                 output.close();
@@ -128,3 +128,64 @@ public class Client {
 
 - note: while loop을 어디걸어야 할지 헷갈림. ServerSocket Socket, 네트워크에 대한 이해도가 부족하다고 인지.
 - 왜 Socket으로 연결되고 계속, stream으로 데이터를 주고 받는 것은 HTTP 통신일까?(즉, 요청-응답 후 종료되는 비연결성 통신일까?)
+
+## 개선2
+
+현재 서버는 한개의 클라이언트랑만 통신이 가능하다. 스레드를 활용하여 여러 클라이언트와 통신을 구현해보자.
+클라이언트가 서버에 연결을 시도하면, 세션 스레드를 만들고 세션 스레드를 통해 통신하도록 할 것이다.
+
+- 메인 스레드: 클라이언트가 연결되면, 세션 스레드를 만들어주는 역할
+- 세션 스레드: 연결된 클라이언트와 통신하는 역할
+
+```java
+public class Session implements Runnable {
+    private final Socket socket;
+
+    public Session(Socket socket) {
+        this.socket = socket;
+    }
+
+    @Override
+    public void run() {
+        log.info("소켓 연결");
+        DataInputStream input = new DataInputStream(socket.getInputStream());
+        DataOutputStream output = new DataOutputStream(socket.getOutputStream());
+
+        while (true) {
+            String request = input.readUTF();
+            log.info("client -> server: {}", request);
+
+            if ("exit".equals(request)) {
+                input.close();
+                output.close();
+                break;
+            }
+            String response = request + " ACK";
+            output.writeUTF(response);
+            log.info("server -> client: {}", response);
+        }
+
+        input.close();
+        output.close();
+        // socket.close()가 어느 시점에 호출되지?
+    }
+}
+```
+
+```java
+@Slf4j
+public class Server {
+    private static final int PORT = 80000;
+
+    public static void main(String[] args) throws IOException {
+        log.info("서버 시작");
+        try (ServerSocket serverSocket = new ServerSocket(PORT)) {
+            log.info("서버 소켓 시작, 포트:{}", PORT);
+            try (Socket socket = serverSocket.accept()) {
+                log.info("소켓 연결");
+                new Thread(new Session(socket)).start();
+            }
+        }
+    }
+}
+```
