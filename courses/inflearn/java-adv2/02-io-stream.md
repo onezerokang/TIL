@@ -3,8 +3,8 @@
 I/O는 파일, 네트워크, 메모리 등에 데이터를 읽고 쓰는 작업을 말한다.
 자바는 추상 클래스 InputStream과 OutputStream을 제공해, 대상이 무엇이든(파일·네트워크·메모리 등) 일관된 방식으로 I/O를 처리할 수 있다.
 
-![stream.png](static/image/stream.png)
-![abstract-io-stream.png](static/image/abstract-io-stream.png)
+![stream.png](images/stream.png)
+![abstract-io-stream.png](images/abstract-io-stream.png)
 
 예를 들어 파일에 데이터를 기록할 때는 FileOutputStream, 파일에서 데이터를 읽어올 때는 FileInputStream을 사용한다.
 

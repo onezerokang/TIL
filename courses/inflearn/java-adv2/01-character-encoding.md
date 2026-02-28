@@ -13,7 +13,7 @@
 컴퓨터는 문자와 숫자를 매핑한 '문자 집합(character set)'을 사용하여 문자를 인코딩/디코딩한다.
 여기서 인코딩이란 문자를 이진수로 변환하는 것이고, 디코딩은 이진수를 문자로 변환하는 과정이다.
 
-![ASCII.png](static/image/ASCII.png)
+![ASCII.png](images/ascii.png)
 
 문자 집합의 종류는 다음과 같다.
 
